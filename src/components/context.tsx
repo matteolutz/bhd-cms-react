@@ -30,6 +30,11 @@ export const BhdContext: FC<
 
     return {
       axiosInstance,
+      getAssetUrl: (assetId: string): string =>
+        new URL(
+          `api/asset/${assetId}?accessToken=${context.accessToken}`,
+          options.baseUrl ?? DEFAULT_BASE_URL,
+        ).href,
       getContentBlock: (id: string): Promise<BhdContentBlockWithBlueprint> =>
         context.axiosInstance
           .get<{ block: BhdContentBlockWithBlueprint }>(`/block/${id}`)

@@ -7,14 +7,13 @@ export type BhdContextType = {
   accessToken: string;
   blueprintLut: BhdBlueprintLut;
   getContentBlock: (id: string) => Promise<BhdContentBlockWithBlueprint>;
+  getAssetUrl: (assetId: string) => string;
 };
 
 export type BhdInternalContextType = BhdContextType & {
   axiosInstance: AxiosInstance;
 
   getBlueprintComponent: (id: string) => BhdBlueprintLut[keyof BhdBlueprintLut];
-
-  getContentBlock: (id: string) => Promise<BhdContentBlockWithBlueprint>;
 
   loadingComponent: ElementType;
 };
