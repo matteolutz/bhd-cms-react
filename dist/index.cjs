@@ -130,6 +130,10 @@ var BhdContext = ({ children, options }) => {
     });
     return {
       axiosInstance,
+      getAssetUrl: (assetId) => new URL(
+        `api/asset/${assetId}?accessToken=${context.accessToken}`,
+        options.baseUrl ?? DEFAULT_BASE_URL
+      ).href,
       getContentBlock: (id) => context.axiosInstance.get(`/block/${id}`).then((res) => res.data.block),
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Loading..." })),
@@ -145,7 +149,8 @@ var useBhdContext = () => {
   return {
     accessToken: internalContext.accessToken,
     blueprintLut: internalContext.blueprintLut,
-    getContentBlock: internalContext.getContentBlock
+    getContentBlock: internalContext.getContentBlock,
+    getAssetUrl: internalContext.getAssetUrl
   };
 };
 // Annotate the CommonJS export names for ESM import in node:

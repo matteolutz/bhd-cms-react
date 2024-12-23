@@ -48,6 +48,7 @@ type BhdContextType = {
     accessToken: string;
     blueprintLut: BhdBlueprintLut;
     getContentBlock: (id: string) => Promise<BhdContentBlockWithBlueprint>;
+    getAssetUrl: (assetId: string) => string;
 };
 
 declare const useBhdContext: () => BhdContextType;

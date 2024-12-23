@@ -9,5 +9,6 @@ export const useBhdContext = (): BhdContextType => {
     accessToken: internalContext.accessToken,
     blueprintLut: internalContext.blueprintLut,
     getContentBlock: internalContext.getContentBlock,
+    getAssetUrl: internalContext.getAssetUrl,
   };
 };
