@@ -1,7 +1,9 @@
 {
   "name": "bhd-cms-react",
   "author": "Matteo Lutz <info@matteolutz.de>",
-  "version": "1.0.2",
+  "description": "React.js bindings for the bhd CMS",
+  "license": "MIT",
+  "version": "1.0.3",
   "main": "./dist/index.js",
   "module": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
@@ -10,8 +12,6 @@
     "build": "tsup",
     "lint": "eslint ."
   },
-  "license": "MIT",
-  "description": "",
   "dependencies": {
     "axios": "^1.7.9",
     "react": "^18.3.1",
