@@ -49,15 +49,13 @@ export const BhdContext: FC<
   });
 
   useEffect(() => {
-    console.log("setting body class names");
-    if (context.liveEditEnabled) document.body.classList.add("bhd-live-edit");
-    else document.body.classList.remove("bhd-live-edit");
+    if (context.liveEditEnabled) document.body.dataset.bhdLiveEdit = "enabled";
+    else document.body.dataset.bhdLiveEdit = "disabled";
   }, [context.liveEditEnabled]);
 
   useEffect(() => {
     window.addEventListener("message", (e) => {
       if (e.data === "bhd-live-edit") {
-        console.log("enabling live edit");
         setContext((prev) => ({ ...prev, liveEditEnabled: true }));
       }
     });
