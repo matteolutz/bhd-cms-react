@@ -1,4 +1,4 @@
-import { FC, ElementType, Ref, PropsWithChildren } from 'react';
+import { FC, HTMLProps, ElementType, Ref, PropsWithChildren } from 'react';
 
 type BhdComponentProps = {
     contentBlockId: string;
@@ -30,7 +30,7 @@ type BhdContentBlockWithBlueprint = BhdContentBlock & {
 
 type BhdContentBlockComponentFieldProps = {
     "data-bhd-field-name": string;
-};
+} & Pick<HTMLProps<HTMLElement>, "contentEditable">;
 type BhdContentBlockComponentRootProps = {
     "data-bhd-block-id": string;
     "data-bhd-block-parent-field-name"?: string;

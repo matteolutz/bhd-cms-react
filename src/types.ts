@@ -1,9 +1,10 @@
-import { ElementType, Ref } from "react";
+import { ElementType, HTMLProps, Ref } from "react";
 import { BhdContentBlockWithBlueprint } from "./models";
 
 export type BhdContentBlockComponentFieldProps = {
   "data-bhd-field-name": string;
-};
+} & Pick<HTMLProps<HTMLElement>, "contentEditable">;
+
 export type BhdContentBlockComponentRootProps = {
   "data-bhd-block-id": string;
   "data-bhd-block-parent-field-name"?: string;

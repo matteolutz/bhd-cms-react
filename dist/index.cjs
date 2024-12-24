@@ -28,13 +28,13 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
-var index_exports = {};
-__export(index_exports, {
+var src_exports = {};
+__export(src_exports, {
   BhdComponent: () => BhdComponent,
   BhdContext: () => BhdContext,
   useBhdContext: () => useBhdContext
 });
-module.exports = __toCommonJS(index_exports);
+module.exports = __toCommonJS(src_exports);
 
 // src/components/bhd.tsx
 var import_react3 = require("react");
@@ -55,7 +55,8 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ..
     contentBlock.contentBlockBlueprintId
   );
   const bhdField = (fieldName) => ({
-    "data-bhd-field-name": fieldName
+    "data-bhd-field-name": fieldName,
+    contentEditable: context.liveEditEnabled
   });
   const bhdRoot = () => ({
     "data-bhd-block-id": contentBlock.id,

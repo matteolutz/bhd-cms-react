@@ -22,6 +22,7 @@ export const BhdContentBlockComponent = forwardRef<
 
   const bhdField = (fieldName: string): BhdContentBlockComponentFieldProps => ({
     "data-bhd-field-name": fieldName,
+    contentEditable: context.liveEditEnabled,
   });
 
   const bhdRoot = (): BhdContentBlockComponentRootProps => ({

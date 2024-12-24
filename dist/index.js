@@ -17,7 +17,8 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
     contentBlock.contentBlockBlueprintId
   );
   const bhdField = (fieldName) => ({
-    "data-bhd-field-name": fieldName
+    "data-bhd-field-name": fieldName,
+    contentEditable: context.liveEditEnabled
   });
   const bhdRoot = () => ({
     "data-bhd-block-id": contentBlock.id,
