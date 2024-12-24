@@ -1,3 +1,3 @@
-body.bhd-live-edit [bhd-content-block-id] {
+body[bhd-live-edit="enabled"] *[data-bhd-block-id] {
     border: 1px solid red;
 }
