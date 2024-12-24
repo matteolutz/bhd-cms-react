@@ -15,6 +15,10 @@ export type BhdContextOptions = {
 export const BhdContext: FC<
   PropsWithChildren<{ options: BhdContextOptions }>
 > = ({ children, options }) => {
+  const [dirtyLiveFields, setDirtyLiveFields] = useState<
+    Record<string, Record<string, unknown>>
+  >({});
+
   const [context, setContext] = useState<BhdInternalContextType>(() => {
     const axiosInstance = axios.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
@@ -44,6 +48,14 @@ export const BhdContext: FC<
       ): BhdBlueprintLut[keyof BhdBlueprintLut] => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => <p>Loading...</p>),
       liveEditEnabled: false,
+      onFieldChange: (blockId: string, fieldName: string, value: unknown) =>
+        setDirtyLiveFields({
+          ...dirtyLiveFields,
+          [blockId]: {
+            ...(dirtyLiveFields[blockId] ?? {}),
+            [fieldName]: value,
+          },
+        }),
       ...options,
     };
   });
@@ -55,8 +67,19 @@ export const BhdContext: FC<
 
   useEffect(() => {
     window.addEventListener("message", (e) => {
-      if (e.data === "bhd-live-edit") {
-        setContext((prev) => ({ ...prev, liveEditEnabled: true }));
+      switch (e.data.type) {
+        case "bhd-live-edit":
+          setContext((prev) => ({ ...prev, liveEditEnabled: true }));
+          break;
+        case "bhd-live-edit-save": {
+          if (!context.liveEditEnabled) break;
+          window.top?.postMessage(
+            { type: "bhd-live-edit-save-result", dirtyFields: dirtyLiveFields },
+            "*",
+          );
+          setDirtyLiveFields({});
+          break;
+        }
       }
     });
   }, []);

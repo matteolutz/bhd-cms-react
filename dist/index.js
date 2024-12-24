@@ -18,7 +18,12 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
   );
   const bhdField = (fieldName) => ({
     "data-bhd-field-name": fieldName,
-    contentEditable: context.liveEditEnabled
+    contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
+    onInput: context.liveEditEnabled ? (e) => context.onFieldChange(
+      contentBlock.id,
+      fieldName,
+      e.target.innerText
+    ) : void 0
   });
   const bhdRoot = () => ({
     "data-bhd-block-id": contentBlock.id,
@@ -91,6 +96,7 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 // src/components/context.tsx
 import { jsx as jsx3 } from "react/jsx-runtime";
 var BhdContext = ({ children, options }) => {
+  const [dirtyLiveFields, setDirtyLiveFields] = useState2({});
   const [context, setContext] = useState2(() => {
     const axiosInstance = axios.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
@@ -112,6 +118,13 @@ var BhdContext = ({ children, options }) => {
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ jsx3("p", { children: "Loading..." })),
       liveEditEnabled: false,
+      onFieldChange: (blockId, fieldName, value) => setDirtyLiveFields({
+        ...dirtyLiveFields,
+        [blockId]: {
+          ...dirtyLiveFields[blockId] ?? {},
+          [fieldName]: value
+        }
+      }),
       ...options
     };
   });
@@ -121,8 +134,19 @@ var BhdContext = ({ children, options }) => {
   }, [context.liveEditEnabled]);
   useEffect2(() => {
     window.addEventListener("message", (e) => {
-      if (e.data === "bhd-live-edit") {
-        setContext((prev) => ({ ...prev, liveEditEnabled: true }));
+      switch (e.data.type) {
+        case "bhd-live-edit":
+          setContext((prev) => ({ ...prev, liveEditEnabled: true }));
+          break;
+        case "bhd-live-edit-save": {
+          if (!context.liveEditEnabled) break;
+          window.top?.postMessage(
+            { type: "bhd-live-edit-save-result", dirtyFields: dirtyLiveFields },
+            "*"
+          );
+          setDirtyLiveFields({});
+          break;
+        }
       }
     });
   }, []);

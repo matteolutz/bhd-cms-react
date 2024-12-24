@@ -56,7 +56,12 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ..
   );
   const bhdField = (fieldName) => ({
     "data-bhd-field-name": fieldName,
-    contentEditable: context.liveEditEnabled
+    contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
+    onInput: context.liveEditEnabled ? (e) => context.onFieldChange(
+      contentBlock.id,
+      fieldName,
+      e.target.innerText
+    ) : void 0
   });
   const bhdRoot = () => ({
     "data-bhd-block-id": contentBlock.id,
@@ -129,6 +134,7 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 // src/components/context.tsx
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var BhdContext = ({ children, options }) => {
+  const [dirtyLiveFields, setDirtyLiveFields] = (0, import_react4.useState)({});
   const [context, setContext] = (0, import_react4.useState)(() => {
     const axiosInstance = import_axios.default.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
@@ -150,6 +156,13 @@ var BhdContext = ({ children, options }) => {
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Loading..." })),
       liveEditEnabled: false,
+      onFieldChange: (blockId, fieldName, value) => setDirtyLiveFields({
+        ...dirtyLiveFields,
+        [blockId]: {
+          ...dirtyLiveFields[blockId] ?? {},
+          [fieldName]: value
+        }
+      }),
       ...options
     };
   });
@@ -159,8 +172,19 @@ var BhdContext = ({ children, options }) => {
   }, [context.liveEditEnabled]);
   (0, import_react4.useEffect)(() => {
     window.addEventListener("message", (e) => {
-      if (e.data === "bhd-live-edit") {
-        setContext((prev) => ({ ...prev, liveEditEnabled: true }));
+      switch (e.data.type) {
+        case "bhd-live-edit":
+          setContext((prev) => ({ ...prev, liveEditEnabled: true }));
+          break;
+        case "bhd-live-edit-save": {
+          if (!context.liveEditEnabled) break;
+          window.top?.postMessage(
+            { type: "bhd-live-edit-save-result", dirtyFields: dirtyLiveFields },
+            "*"
+          );
+          setDirtyLiveFields({});
+          break;
+        }
       }
     });
   }, []);

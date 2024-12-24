@@ -30,7 +30,7 @@ type BhdContentBlockWithBlueprint = BhdContentBlock & {
 
 type BhdContentBlockComponentFieldProps = {
     "data-bhd-field-name": string;
-} & Pick<HTMLProps<HTMLElement>, "contentEditable">;
+} & Pick<HTMLProps<HTMLElement>, "contentEditable" | "onInput">;
 type BhdContentBlockComponentRootProps = {
     "data-bhd-block-id": string;
     "data-bhd-block-parent-field-name"?: string;

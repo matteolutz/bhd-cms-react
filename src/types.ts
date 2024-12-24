@@ -3,7 +3,7 @@ import { BhdContentBlockWithBlueprint } from "./models";
 
 export type BhdContentBlockComponentFieldProps = {
   "data-bhd-field-name": string;
-} & Pick<HTMLProps<HTMLElement>, "contentEditable">;
+} & Pick<HTMLProps<HTMLElement>, "contentEditable" | "onInput">;
 
 export type BhdContentBlockComponentRootProps = {
   "data-bhd-block-id": string;
