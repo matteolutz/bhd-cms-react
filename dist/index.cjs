@@ -54,6 +54,15 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ..
   const Component = context.getBlueprintComponent(
     contentBlock.contentBlockBlueprintId
   );
+  const bhdField = (fieldName) => ({
+    "data-bhd-field-name": fieldName
+  });
+  const bhdRoot = () => ({
+    "data-bhd-block-id": contentBlock.id,
+    ..."data-bhd-field-name" in rest ? {
+      "data-bhd-block-parent-field-name": rest["data-bhd-field-name"]
+    } : {}
+  });
   if (Component) {
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       Component,
@@ -61,20 +70,13 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ..
         ref,
         loadingComponent: context.loadingComponent,
         contentBlock,
-        bhdField: (fieldName) => ({
-          "data-bhd-field-name": fieldName
-        }),
-        bhdRoot: () => ({
-          "data-bhd-block-id": contentBlock.id,
-          ..."data-bhd-field-name" in rest ? {
-            "data-bhd-block-parent-field-name": rest["data-bhd-field-name"]
-          } : {}
-        }),
+        bhdField,
+        bhdRoot,
         ...rest
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { ...rest, "data-bhd-block-id": contentBlock.id, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { ...bhdRoot(), children: [
     "No component was registered for the blueprint",
     " ",
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: contentBlock.contentBlockBlueprint.name }),

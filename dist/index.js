@@ -16,6 +16,15 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
   const Component = context.getBlueprintComponent(
     contentBlock.contentBlockBlueprintId
   );
+  const bhdField = (fieldName) => ({
+    "data-bhd-field-name": fieldName
+  });
+  const bhdRoot = () => ({
+    "data-bhd-block-id": contentBlock.id,
+    ..."data-bhd-field-name" in rest ? {
+      "data-bhd-block-parent-field-name": rest["data-bhd-field-name"]
+    } : {}
+  });
   if (Component) {
     return /* @__PURE__ */ jsx(
       Component,
@@ -23,20 +32,13 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
         ref,
         loadingComponent: context.loadingComponent,
         contentBlock,
-        bhdField: (fieldName) => ({
-          "data-bhd-field-name": fieldName
-        }),
-        bhdRoot: () => ({
-          "data-bhd-block-id": contentBlock.id,
-          ..."data-bhd-field-name" in rest ? {
-            "data-bhd-block-parent-field-name": rest["data-bhd-field-name"]
-          } : {}
-        }),
+        bhdField,
+        bhdRoot,
         ...rest
       }
     );
   }
-  return /* @__PURE__ */ jsxs("p", { ...rest, "data-bhd-block-id": contentBlock.id, children: [
+  return /* @__PURE__ */ jsxs("p", { ...bhdRoot(), children: [
     "No component was registered for the blueprint",
     " ",
     /* @__PURE__ */ jsx("strong", { children: contentBlock.contentBlockBlueprint.name }),
