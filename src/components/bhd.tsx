@@ -33,12 +33,12 @@ export const BhdComponent: FC<BhdComponentProps> = forwardRef<
   }, [contentBlockId, context]);
 
   if (contentBlock.state === "loading") {
-    return <context.loadingComponent />;
+    return <context.loadingComponent {...rest} />;
   }
 
   if (contentBlock.state === "failed") {
     // TODO: custom error component
-    return <div>Error: {contentBlock.reason}</div>;
+    return <div {...rest}>Error: {contentBlock.reason}</div>;
   }
 
   return (

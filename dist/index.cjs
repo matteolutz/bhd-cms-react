@@ -74,7 +74,7 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ..
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { ...rest, "data-bhd-block-id": contentBlock.id, children: [
     "No component was registered for the blueprint",
     " ",
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: contentBlock.contentBlockBlueprint.name }),
@@ -98,10 +98,10 @@ var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, ...rest }, r
     );
   }, [contentBlockId, context]);
   if (contentBlock.state === "loading") {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(context.loadingComponent, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(context.loadingComponent, { ...rest });
   }
   if (contentBlock.state === "failed") {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { ...rest, children: [
       "Error: ",
       contentBlock.reason
     ] });

@@ -41,7 +41,7 @@ export const BhdContentBlockComponent = forwardRef<
   }
 
   return (
-    <p>
+    <p {...rest} data-bhd-block-id={contentBlock.id}>
       No component was registered for the blueprint{" "}
       <strong>{contentBlock.contentBlockBlueprint.name}</strong> (ID:{" "}
       {contentBlock.contentBlockBlueprintId}).

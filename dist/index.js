@@ -36,7 +36,7 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
       }
     );
   }
-  return /* @__PURE__ */ jsxs("p", { children: [
+  return /* @__PURE__ */ jsxs("p", { ...rest, "data-bhd-block-id": contentBlock.id, children: [
     "No component was registered for the blueprint",
     " ",
     /* @__PURE__ */ jsx("strong", { children: contentBlock.contentBlockBlueprint.name }),
@@ -60,10 +60,10 @@ var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
     );
   }, [contentBlockId, context]);
   if (contentBlock.state === "loading") {
-    return /* @__PURE__ */ jsx2(context.loadingComponent, {});
+    return /* @__PURE__ */ jsx2(context.loadingComponent, { ...rest });
   }
   if (contentBlock.state === "failed") {
-    return /* @__PURE__ */ jsxs2("div", { children: [
+    return /* @__PURE__ */ jsxs2("div", { ...rest, children: [
       "Error: ",
       contentBlock.reason
     ] });
