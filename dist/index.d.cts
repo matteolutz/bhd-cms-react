@@ -29,12 +29,15 @@ type BhdContentBlockWithBlueprint = BhdContentBlock & {
 };
 
 type BhdContentBlockComponentFieldProps = {
-    "data-bhd-block-id": string;
     "data-bhd-field-name": string;
+};
+type BhdContentBlockComponentRootProps = {
+    "data-bhd-block-id": string;
 };
 type BhdContentBlockComponentProps = {
     contentBlock: BhdContentBlockWithBlueprint;
-    bhdProps: (fieldName: string) => BhdContentBlockComponentFieldProps;
+    bhdField: (fieldName: string) => BhdContentBlockComponentFieldProps;
+    bhdRoot: () => BhdContentBlockComponentRootProps;
     loadingComponent: ElementType;
     ref: Ref<HTMLElement>;
 };
@@ -59,4 +62,4 @@ type BhdContextType = {
 
 declare const useBhdContext: () => BhdContextType;
 
-export { type BhdBlueprintLut, BhdComponent, type BhdComponentProps, type BhdContentBlock, type BhdContentBlockBlueprint, type BhdContentBlockComponentFieldProps, type BhdContentBlockComponentProps, type BhdContentBlockWithBlueprint, BhdContext, type BhdContextOptions, type BhdContextType, useBhdContext };
+export { type BhdBlueprintLut, BhdComponent, type BhdComponentProps, type BhdContentBlock, type BhdContentBlockBlueprint, type BhdContentBlockComponentFieldProps, type BhdContentBlockComponentProps, type BhdContentBlockComponentRootProps, type BhdContentBlockWithBlueprint, BhdContext, type BhdContextOptions, type BhdContextType, useBhdContext };

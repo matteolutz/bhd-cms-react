@@ -22,9 +22,11 @@ export const BhdContentBlockComponent = forwardRef<
         ref={ref}
         loadingComponent={context.loadingComponent}
         contentBlock={contentBlock}
-        bhdProps={(fieldName: string) => ({
-          "data-bhd-block-id": contentBlock.id,
+        bhdField={(fieldName: string) => ({
           "data-bhd-field-name": fieldName,
+        })}
+        bhdRoot={() => ({
+          "data-bhd-block-id": contentBlock.id,
         })}
         {...rest}
       />

@@ -23,9 +23,11 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
         ref,
         loadingComponent: context.loadingComponent,
         contentBlock,
-        bhdProps: (fieldName) => ({
-          "data-bhd-block-id": contentBlock.id,
+        bhdField: (fieldName) => ({
           "data-bhd-field-name": fieldName
+        }),
+        bhdRoot: () => ({
+          "data-bhd-block-id": contentBlock.id
         }),
         ...rest
       }

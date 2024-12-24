@@ -2,13 +2,16 @@ import { ElementType, Ref } from "react";
 import { BhdContentBlockWithBlueprint } from "./models";
 
 export type BhdContentBlockComponentFieldProps = {
-  "data-bhd-block-id": string;
   "data-bhd-field-name": string;
+};
+export type BhdContentBlockComponentRootProps = {
+  "data-bhd-block-id": string;
 };
 
 export type BhdContentBlockComponentProps = {
   contentBlock: BhdContentBlockWithBlueprint;
-  bhdProps: (fieldName: string) => BhdContentBlockComponentFieldProps;
+  bhdField: (fieldName: string) => BhdContentBlockComponentFieldProps;
+  bhdRoot: () => BhdContentBlockComponentRootProps;
   loadingComponent: ElementType;
   ref: Ref<HTMLElement>;
 };
