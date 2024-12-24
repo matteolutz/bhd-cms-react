@@ -62,7 +62,6 @@ export const BhdContext: FC<
       loadingComponent: options.loadingComponent ?? (() => <p>Loading...</p>),
       liveEditEnabled: false,
       onFieldChange: (blockId: string, fieldName: string, value: unknown) => {
-        console.log("onFieldChange", blockId, fieldName, value);
         setDirtyLiveFields({
           ...dirtyLiveFields,
           [blockId]: {

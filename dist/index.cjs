@@ -161,7 +161,6 @@ var BhdContext = ({ children, options }) => {
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Loading..." })),
       liveEditEnabled: false,
       onFieldChange: (blockId, fieldName, value) => {
-        console.log("onFieldChange", blockId, fieldName, value);
         setDirtyLiveFields({
           ...dirtyLiveFields,
           [blockId]: {
