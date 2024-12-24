@@ -15,7 +15,7 @@ export type BhdContextOptions = {
 export const BhdContext: FC<
   PropsWithChildren<{ options: BhdContextOptions }>
 > = ({ children, options }) => {
-  const [context] = useState<BhdInternalContextType>(() => {
+  const [context, setContext] = useState<BhdInternalContextType>(() => {
     const axiosInstance = axios.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
       headers: {
@@ -43,14 +43,20 @@ export const BhdContext: FC<
         id: string,
       ): BhdBlueprintLut[keyof BhdBlueprintLut] => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => <p>Loading...</p>),
+      liveEditEnabled: false,
       ...options,
     };
   });
 
   useEffect(() => {
+    if (context.liveEditEnabled) document.body.classList.add("bhd-live-edit");
+    else document.body.classList.remove("bhd-live-edit");
+  }, [context.liveEditEnabled]);
+
+  useEffect(() => {
     window.addEventListener("message", (e) => {
       if (e.data === "bhd-live-edit") {
-        window.top?.postMessage("bhd-live-edit-ack", "*");
+        setContext((prev) => ({ ...prev, liveEditEnabled: true }));
       }
     });
   }, []);

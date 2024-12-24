@@ -90,7 +90,7 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 // src/components/context.tsx
 import { jsx as jsx3 } from "react/jsx-runtime";
 var BhdContext = ({ children, options }) => {
-  const [context] = useState2(() => {
+  const [context, setContext] = useState2(() => {
     const axiosInstance = axios.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
       headers: {
@@ -110,13 +110,18 @@ var BhdContext = ({ children, options }) => {
       getContentBlock: (id) => context.axiosInstance.get(`/block/${id}`).then((res) => res.data.block),
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ jsx3("p", { children: "Loading..." })),
+      liveEditEnabled: false,
       ...options
     };
   });
   useEffect2(() => {
+    if (context.liveEditEnabled) document.body.classList.add("bhd-live-edit");
+    else document.body.classList.remove("bhd-live-edit");
+  }, [context.liveEditEnabled]);
+  useEffect2(() => {
     window.addEventListener("message", (e) => {
       if (e.data === "bhd-live-edit") {
-        window.top?.postMessage("bhd-live-edit-ack", "*");
+        setContext((prev) => ({ ...prev, liveEditEnabled: true }));
       }
     });
   }, []);

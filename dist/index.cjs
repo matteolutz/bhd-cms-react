@@ -28,13 +28,13 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
-var src_exports = {};
-__export(src_exports, {
+var index_exports = {};
+__export(index_exports, {
   BhdComponent: () => BhdComponent,
   BhdContext: () => BhdContext,
   useBhdContext: () => useBhdContext
 });
-module.exports = __toCommonJS(src_exports);
+module.exports = __toCommonJS(index_exports);
 
 // src/components/bhd.tsx
 var import_react3 = require("react");
@@ -128,7 +128,7 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 // src/components/context.tsx
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var BhdContext = ({ children, options }) => {
-  const [context] = (0, import_react4.useState)(() => {
+  const [context, setContext] = (0, import_react4.useState)(() => {
     const axiosInstance = import_axios.default.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
       headers: {
@@ -148,13 +148,18 @@ var BhdContext = ({ children, options }) => {
       getContentBlock: (id) => context.axiosInstance.get(`/block/${id}`).then((res) => res.data.block),
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Loading..." })),
+      liveEditEnabled: false,
       ...options
     };
   });
   (0, import_react4.useEffect)(() => {
+    if (context.liveEditEnabled) document.body.classList.add("bhd-live-edit");
+    else document.body.classList.remove("bhd-live-edit");
+  }, [context.liveEditEnabled]);
+  (0, import_react4.useEffect)(() => {
     window.addEventListener("message", (e) => {
       if (e.data === "bhd-live-edit") {
-        window.top?.postMessage("bhd-live-edit-ack", "*");
+        setContext((prev) => ({ ...prev, liveEditEnabled: true }));
       }
     });
   }, []);

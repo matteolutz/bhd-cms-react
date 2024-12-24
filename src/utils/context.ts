@@ -16,6 +16,8 @@ export type BhdInternalContextType = BhdContextType & {
   getBlueprintComponent: (id: string) => BhdBlueprintLut[keyof BhdBlueprintLut];
 
   loadingComponent: ElementType;
+
+  liveEditEnabled: boolean;
 };
 
 export const BhdInternalContext = createContext<BhdInternalContextType>(
