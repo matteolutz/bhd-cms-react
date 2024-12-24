@@ -84,7 +84,6 @@ export const BhdContext: FC<
             },
             "*",
           );
-          setDirtyLiveFields({});
           break;
         }
       }

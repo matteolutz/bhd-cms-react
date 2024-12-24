@@ -57,11 +57,11 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ..
   const bhdField = (fieldName) => ({
     "data-bhd-field-name": fieldName,
     contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
-    onInput: context.liveEditEnabled ? (e) => context.onFieldChange(
+    onInput: (e) => context.onFieldChange(
       contentBlock.id,
       fieldName,
       e.target.innerText
-    ) : void 0
+    )
   });
   const bhdRoot = () => ({
     "data-bhd-block-id": contentBlock.id,
@@ -187,7 +187,6 @@ var BhdContext = ({ children, options }) => {
             },
             "*"
           );
-          setDirtyLiveFields({});
           break;
         }
       }
