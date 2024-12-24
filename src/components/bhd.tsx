@@ -1,4 +1,4 @@
-import { FC, forwardRef, useEffect, useState } from "react";
+import { FC, forwardRef, HTMLProps, useEffect, useState } from "react";
 import { useBhdInternalContext } from "../utils/context";
 import { BhdContentBlockWithBlueprint } from "../models/contentBlock";
 import { BhdContentBlockComponent } from "./contentBlock";
@@ -9,7 +9,7 @@ export type BhdComponentProps = {
 
 export const BhdComponent: FC<BhdComponentProps> = forwardRef<
   HTMLElement,
-  BhdComponentProps
+  BhdComponentProps & HTMLProps<HTMLElement>
 >(({ contentBlockId, ...rest }, ref) => {
   const context = useBhdInternalContext();
 

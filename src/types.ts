@@ -6,6 +6,7 @@ export type BhdContentBlockComponentFieldProps = {
 };
 export type BhdContentBlockComponentRootProps = {
   "data-bhd-block-id": string;
+  "data-bhd-block-parent-field-name"?: string;
 };
 
 export type BhdContentBlockComponentProps = {

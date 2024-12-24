@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, HTMLProps } from "react";
 import { BhdContentBlockWithBlueprint } from "../models/contentBlock";
 import { useBhdInternalContext } from "../utils/context";
 
@@ -8,7 +8,7 @@ export type BhdContentBlockInternalComponentProps = {
 
 export const BhdContentBlockComponent = forwardRef<
   HTMLElement,
-  BhdContentBlockInternalComponentProps
+  BhdContentBlockInternalComponentProps & HTMLProps<HTMLElement>
 >(({ contentBlock, ...rest }, ref) => {
   const context = useBhdInternalContext();
 
@@ -27,6 +27,13 @@ export const BhdContentBlockComponent = forwardRef<
         })}
         bhdRoot={() => ({
           "data-bhd-block-id": contentBlock.id,
+          ...("data-bhd-field-name" in rest
+            ? {
+                "data-bhd-block-parent-field-name": rest[
+                  "data-bhd-field-name"
+                ] as string,
+              }
+            : {}),
         })}
         {...rest}
       />

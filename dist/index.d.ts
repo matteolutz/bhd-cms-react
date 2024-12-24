@@ -33,6 +33,7 @@ type BhdContentBlockComponentFieldProps = {
 };
 type BhdContentBlockComponentRootProps = {
     "data-bhd-block-id": string;
+    "data-bhd-block-parent-field-name"?: string;
 };
 type BhdContentBlockComponentProps = {
     contentBlock: BhdContentBlockWithBlueprint;
