@@ -115,12 +115,14 @@ var BhdContext = ({ children, options }) => {
     };
   });
   useEffect2(() => {
+    console.log("setting body class names");
     if (context.liveEditEnabled) document.body.classList.add("bhd-live-edit");
     else document.body.classList.remove("bhd-live-edit");
   }, [context.liveEditEnabled]);
   useEffect2(() => {
     window.addEventListener("message", (e) => {
       if (e.data === "bhd-live-edit") {
+        console.log("enabling live edit");
         setContext((prev) => ({ ...prev, liveEditEnabled: true }));
       }
     });

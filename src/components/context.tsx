@@ -49,6 +49,7 @@ export const BhdContext: FC<
   });
 
   useEffect(() => {
+    console.log("setting body class names");
     if (context.liveEditEnabled) document.body.classList.add("bhd-live-edit");
     else document.body.classList.remove("bhd-live-edit");
   }, [context.liveEditEnabled]);
@@ -56,6 +57,7 @@ export const BhdContext: FC<
   useEffect(() => {
     window.addEventListener("message", (e) => {
       if (e.data === "bhd-live-edit") {
+        console.log("enabling live edit");
         setContext((prev) => ({ ...prev, liveEditEnabled: true }));
       }
     });
