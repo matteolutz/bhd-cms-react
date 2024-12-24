@@ -19,11 +19,13 @@ export const BhdContentBlockComponent = forwardRef<
   if (Component) {
     return (
       <Component
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         ref={ref}
         loadingComponent={context.loadingComponent}
         contentBlock={contentBlock}
+        bhdProps={(fieldName: string) => ({
+          "data-bhdBlockId": contentBlock.id,
+          "data-bhdFieldName": fieldName,
+        })}
         {...rest}
       />
     );
