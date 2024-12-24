@@ -118,13 +118,16 @@ var BhdContext = ({ children, options }) => {
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ jsx3("p", { children: "Loading..." })),
       liveEditEnabled: false,
-      onFieldChange: (blockId, fieldName, value) => setDirtyLiveFields({
-        ...dirtyLiveFields,
-        [blockId]: {
-          ...dirtyLiveFields[blockId] ?? {},
-          [fieldName]: value
-        }
-      }),
+      onFieldChange: (blockId, fieldName, value) => {
+        console.log("onFieldChange", blockId, fieldName, value);
+        setDirtyLiveFields({
+          ...dirtyLiveFields,
+          [blockId]: {
+            ...dirtyLiveFields[blockId] ?? {},
+            [fieldName]: value
+          }
+        });
+      },
       ...options
     };
   });
@@ -135,7 +138,6 @@ var BhdContext = ({ children, options }) => {
   useEffect2(() => {
     window.addEventListener("message", (e) => {
       if (!("bhd" in e.data)) return;
-      console.log(e.data);
       switch (e.data.type) {
         case "bhd-live-edit":
           setContext((prev) => ({ ...prev, liveEditEnabled: true }));

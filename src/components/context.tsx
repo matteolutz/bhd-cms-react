@@ -48,14 +48,16 @@ export const BhdContext: FC<
       ): BhdBlueprintLut[keyof BhdBlueprintLut] => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => <p>Loading...</p>),
       liveEditEnabled: false,
-      onFieldChange: (blockId: string, fieldName: string, value: unknown) =>
+      onFieldChange: (blockId: string, fieldName: string, value: unknown) => {
+        console.log("onFieldChange", blockId, fieldName, value);
         setDirtyLiveFields({
           ...dirtyLiveFields,
           [blockId]: {
             ...(dirtyLiveFields[blockId] ?? {}),
             [fieldName]: value,
           },
-        }),
+        });
+      },
       ...options,
     };
   });
@@ -68,8 +70,6 @@ export const BhdContext: FC<
   useEffect(() => {
     window.addEventListener("message", (e) => {
       if (!("bhd" in e.data)) return;
-
-      console.log(e.data);
 
       switch (e.data.type) {
         case "bhd-live-edit":
