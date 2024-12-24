@@ -61,6 +61,10 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ..
         ref,
         loadingComponent: context.loadingComponent,
         contentBlock,
+        bhdProps: (fieldName) => ({
+          "data-bhdBlockId": contentBlock.id,
+          "data-bhdFieldName": fieldName
+        }),
         ...rest
       }
     );
