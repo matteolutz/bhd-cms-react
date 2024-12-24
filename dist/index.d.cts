@@ -29,8 +29,8 @@ type BhdContentBlockWithBlueprint = BhdContentBlock & {
 };
 
 type BhdContentBlockComponentFieldProps = {
-    "data-bhdBlockId": string;
-    "data-bhdFieldName": string;
+    "data-bhd-block-id": string;
+    "data-bhd-field-name": string;
 };
 type BhdContentBlockComponentProps = {
     contentBlock: BhdContentBlockWithBlueprint;

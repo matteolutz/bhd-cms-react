@@ -23,8 +23,8 @@ export const BhdContentBlockComponent = forwardRef<
         loadingComponent={context.loadingComponent}
         contentBlock={contentBlock}
         bhdProps={(fieldName: string) => ({
-          "data-bhdBlockId": contentBlock.id,
-          "data-bhdFieldName": fieldName,
+          "data-bhd-block-id": contentBlock.id,
+          "data-bhd-field-name": fieldName,
         })}
         {...rest}
       />

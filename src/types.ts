@@ -2,8 +2,8 @@ import { ElementType, Ref } from "react";
 import { BhdContentBlockWithBlueprint } from "./models";
 
 export type BhdContentBlockComponentFieldProps = {
-  "data-bhdBlockId": string;
-  "data-bhdFieldName": string;
+  "data-bhd-block-id": string;
+  "data-bhd-field-name": string;
 };
 
 export type BhdContentBlockComponentProps = {
