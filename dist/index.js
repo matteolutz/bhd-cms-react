@@ -87,7 +87,11 @@ var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
 });
 
 // src/components/context.tsx
-import { useEffect as useEffect2, useState as useState2 } from "react";
+import {
+  useEffect as useEffect2,
+  useRef,
+  useState as useState2
+} from "react";
 import axios from "axios";
 
 // src/utils/url.ts
@@ -97,6 +101,10 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 import { jsx as jsx3 } from "react/jsx-runtime";
 var BhdContext = ({ children, options }) => {
   const [dirtyLiveFields, setDirtyLiveFields] = useState2({});
+  const dirtyFieldsRef = useRef(dirtyLiveFields);
+  useEffect2(() => {
+    dirtyFieldsRef.current = dirtyLiveFields;
+  }, [dirtyLiveFields]);
   const [context, setContext] = useState2(() => {
     const axiosInstance = axios.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
@@ -147,7 +155,7 @@ var BhdContext = ({ children, options }) => {
             {
               bhd: true,
               type: "bhd-live-edit-save-result",
-              dirtyFields: dirtyLiveFields
+              dirtyFields: dirtyFieldsRef.current
             },
             "*"
           );

@@ -1,4 +1,11 @@
-import { ElementType, FC, PropsWithChildren, useEffect, useState } from "react";
+import {
+  ElementType,
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { BhdInternalContext, BhdInternalContextType } from "../utils/context";
 import axios from "axios";
 import { DEFAULT_BASE_URL } from "../utils/url";
@@ -18,6 +25,12 @@ export const BhdContext: FC<
   const [dirtyLiveFields, setDirtyLiveFields] = useState<
     Record<string, Record<string, unknown>>
   >({});
+
+  const dirtyFieldsRef = useRef(dirtyLiveFields);
+
+  useEffect(() => {
+    dirtyFieldsRef.current = dirtyLiveFields;
+  }, [dirtyLiveFields]);
 
   const [context, setContext] = useState<BhdInternalContextType>(() => {
     const axiosInstance = axios.create({
@@ -80,7 +93,7 @@ export const BhdContext: FC<
             {
               bhd: true,
               type: "bhd-live-edit-save-result",
-              dirtyFields: dirtyLiveFields,
+              dirtyFields: dirtyFieldsRef.current,
             },
             "*",
           );

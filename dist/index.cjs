@@ -135,6 +135,10 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var BhdContext = ({ children, options }) => {
   const [dirtyLiveFields, setDirtyLiveFields] = (0, import_react4.useState)({});
+  const dirtyFieldsRef = (0, import_react4.useRef)(dirtyLiveFields);
+  (0, import_react4.useEffect)(() => {
+    dirtyFieldsRef.current = dirtyLiveFields;
+  }, [dirtyLiveFields]);
   const [context, setContext] = (0, import_react4.useState)(() => {
     const axiosInstance = import_axios.default.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
@@ -185,7 +189,7 @@ var BhdContext = ({ children, options }) => {
             {
               bhd: true,
               type: "bhd-live-edit-save-result",
-              dirtyFields: dirtyLiveFields
+              dirtyFields: dirtyFieldsRef.current
             },
             "*"
           );
