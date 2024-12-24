@@ -179,7 +179,6 @@ var BhdContext = ({ children, options }) => {
           setContext((prev) => ({ ...prev, liveEditEnabled: true }));
           break;
         case "bhd-live-edit-save": {
-          if (!context.liveEditEnabled) break;
           window.top?.postMessage(
             {
               bhd: true,
