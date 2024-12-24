@@ -172,6 +172,8 @@ var BhdContext = ({ children, options }) => {
   }, [context.liveEditEnabled]);
   (0, import_react4.useEffect)(() => {
     window.addEventListener("message", (e) => {
+      if (!("bhd" in e.data)) return;
+      console.log(e.data);
       switch (e.data.type) {
         case "bhd-live-edit":
           setContext((prev) => ({ ...prev, liveEditEnabled: true }));
@@ -179,7 +181,11 @@ var BhdContext = ({ children, options }) => {
         case "bhd-live-edit-save": {
           if (!context.liveEditEnabled) break;
           window.top?.postMessage(
-            { type: "bhd-live-edit-save-result", dirtyFields: dirtyLiveFields },
+            {
+              bhd: true,
+              type: "bhd-live-edit-save-result",
+              dirtyFields: dirtyLiveFields
+            },
             "*"
           );
           setDirtyLiveFields({});
