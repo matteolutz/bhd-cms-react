@@ -116,7 +116,6 @@ var BhdContext = ({ children, options }) => {
   useEffect2(() => {
     window.addEventListener("message", (e) => {
       if (e.data === "bhd-live-edit") {
-        alert("received live edit ping");
         window.top?.postMessage("bhd-live-edit-ack", "*");
       }
     });
