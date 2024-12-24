@@ -1,4 +1,4 @@
-import { ElementType, FC, PropsWithChildren, useState } from "react";
+import { ElementType, FC, PropsWithChildren, useEffect, useState } from "react";
 import { BhdInternalContext, BhdInternalContextType } from "../utils/context";
 import axios from "axios";
 import { DEFAULT_BASE_URL } from "../utils/url";
@@ -46,6 +46,15 @@ export const BhdContext: FC<
       ...options,
     };
   });
+
+  useEffect(() => {
+    window.addEventListener("message", (e) => {
+      if (e.data === "bhd-live-edit") {
+        alert("received live edit ping");
+        window.top?.postMessage("bhd-live-edit-ack", "*");
+      }
+    });
+  }, []);
 
   return (
     <BhdInternalContext.Provider value={context}>

@@ -81,7 +81,7 @@ var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
 });
 
 // src/components/context.tsx
-import { useState as useState2 } from "react";
+import { useEffect as useEffect2, useState as useState2 } from "react";
 import axios from "axios";
 
 // src/utils/url.ts
@@ -113,6 +113,14 @@ var BhdContext = ({ children, options }) => {
       ...options
     };
   });
+  useEffect2(() => {
+    window.addEventListener("message", (e) => {
+      if (e.data === "bhd-live-edit") {
+        alert("received live edit ping");
+        window.top?.postMessage("bhd-live-edit-ack", "*");
+      }
+    });
+  }, []);
   return /* @__PURE__ */ jsx3(BhdInternalContext.Provider, { value: context, children });
 };
 

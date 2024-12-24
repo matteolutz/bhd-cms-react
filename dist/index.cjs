@@ -151,6 +151,14 @@ var BhdContext = ({ children, options }) => {
       ...options
     };
   });
+  (0, import_react4.useEffect)(() => {
+    window.addEventListener("message", (e) => {
+      if (e.data === "bhd-live-edit") {
+        alert("received live edit ping");
+        window.top?.postMessage("bhd-live-edit-ack", "*");
+      }
+    });
+  }, []);
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(BhdInternalContext.Provider, { value: context, children });
 };
 
