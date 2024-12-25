@@ -98,6 +98,10 @@ export const BhdContext: FC<
           );
           break;
         }
+        case "bhd-live-edit-reload": {
+          // trigger a rerender of the context
+          setContext((prev) => ({ ...prev }));
+        }
       }
     });
   }, []);

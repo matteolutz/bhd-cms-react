@@ -27,21 +27,25 @@ export const BhdContentBlockComponent = forwardRef<
     ...props,
     "data-bhd-field-name": fieldName,
     contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
-    onInput: (e) => {
-      // TODO: check for live
-      context.onFieldChange(
-        contentBlock.id,
-        fieldName,
-        (e.target as HTMLElement).innerText,
-      );
-      if (
-        props &&
-        typeof props === "object" &&
-        "onInput" in props &&
-        typeof props.onInput === "function"
-      )
-        props.onInput(e);
-    },
+    ...(context.liveEditEnabled
+      ? {
+          onInput: (e) => {
+            // TODO: check for live
+            context.onFieldChange(
+              contentBlock.id,
+              fieldName,
+              (e.target as HTMLElement).innerText,
+            );
+            if (
+              props &&
+              typeof props === "object" &&
+              "onInput" in props &&
+              typeof props.onInput === "function"
+            )
+              props.onInput(e);
+          },
+        }
+      : {}),
   });
 
   const bhdRoot = <T extends ElementType, P = ComponentProps<T>>(

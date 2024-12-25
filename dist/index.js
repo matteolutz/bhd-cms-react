@@ -20,15 +20,17 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
     ...props,
     "data-bhd-field-name": fieldName,
     contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
-    onInput: (e) => {
-      context.onFieldChange(
-        contentBlock.id,
-        fieldName,
-        e.target.innerText
-      );
-      if (props && typeof props === "object" && "onInput" in props && typeof props.onInput === "function")
-        props.onInput(e);
-    }
+    ...context.liveEditEnabled ? {
+      onInput: (e) => {
+        context.onFieldChange(
+          contentBlock.id,
+          fieldName,
+          e.target.innerText
+        );
+        if (props && typeof props === "object" && "onInput" in props && typeof props.onInput === "function")
+          props.onInput(e);
+      }
+    } : {}
   });
   const bhdRoot = (props) => ({
     ...props,
@@ -165,6 +167,9 @@ var BhdContext = ({ children, options }) => {
             "*"
           );
           break;
+        }
+        case "bhd-live-edit-reload": {
+          setContext((prev) => ({ ...prev }));
         }
       }
     });
