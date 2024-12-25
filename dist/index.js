@@ -169,8 +169,7 @@ var BhdContext = ({ children, options }) => {
           break;
         }
         case "bhd-live-edit-reload": {
-          console.log("reloading page");
-          location.reload();
+          setContext((prev) => ({ ...prev }));
           break;
         }
       }
