@@ -16,16 +16,22 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
   const Component = context.getBlueprintComponent(
     contentBlock.contentBlockBlueprintId
   );
-  const bhdField = (fieldName) => ({
+  const bhdField = (fieldName, props) => ({
+    ...props,
     "data-bhd-field-name": fieldName,
     contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
-    onInput: (e) => context.onFieldChange(
-      contentBlock.id,
-      fieldName,
-      e.target.innerText
-    )
+    onInput: (e) => {
+      context.onFieldChange(
+        contentBlock.id,
+        fieldName,
+        e.target.innerText
+      );
+      if (props && typeof props === "object" && "onInput" in props && typeof props.onInput === "function")
+        props.onInput(e);
+    }
   });
-  const bhdRoot = () => ({
+  const bhdRoot = (props) => ({
+    ...props,
     "data-bhd-block-id": contentBlock.id,
     ..."data-bhd-field-name" in rest ? {
       "data-bhd-block-parent-field-name": rest["data-bhd-field-name"]
@@ -44,7 +50,7 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
       }
     );
   }
-  return /* @__PURE__ */ jsxs("p", { ...bhdRoot(), children: [
+  return /* @__PURE__ */ jsxs("p", { ...bhdRoot({}), children: [
     "No component was registered for the blueprint",
     " ",
     /* @__PURE__ */ jsx("strong", { children: contentBlock.contentBlockBlueprint.name }),

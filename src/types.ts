@@ -1,4 +1,4 @@
-import { ElementType, HTMLProps, Ref } from "react";
+import { ComponentProps, ElementType, HTMLProps, Ref } from "react";
 import { BhdContentBlockWithBlueprint } from "./models";
 
 export type BhdContentBlockComponentFieldProps = {
@@ -12,8 +12,13 @@ export type BhdContentBlockComponentRootProps = {
 
 export type BhdContentBlockComponentProps = {
   contentBlock: BhdContentBlockWithBlueprint;
-  bhdField: (fieldName: string) => BhdContentBlockComponentFieldProps;
-  bhdRoot: () => BhdContentBlockComponentRootProps;
+  bhdField: <T extends ElementType, P = ComponentProps<T>>(
+    fieldName: string,
+    props: P,
+  ) => BhdContentBlockComponentFieldProps & P;
+  bhdRoot: <T extends ElementType, P = ComponentProps<T>>(
+    props: P,
+  ) => BhdContentBlockComponentRootProps & P;
   loadingComponent: ElementType;
   ref: Ref<HTMLElement>;
 };

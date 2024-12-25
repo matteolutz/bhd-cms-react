@@ -1,4 +1,4 @@
-import { FC, HTMLProps, ElementType, Ref, PropsWithChildren } from 'react';
+import { FC, HTMLProps, ElementType, ComponentProps, Ref, PropsWithChildren } from 'react';
 
 type BhdComponentProps = {
     contentBlockId: string;
@@ -37,8 +37,8 @@ type BhdContentBlockComponentRootProps = {
 };
 type BhdContentBlockComponentProps = {
     contentBlock: BhdContentBlockWithBlueprint;
-    bhdField: (fieldName: string) => BhdContentBlockComponentFieldProps;
-    bhdRoot: () => BhdContentBlockComponentRootProps;
+    bhdField: <T extends ElementType, P = ComponentProps<T>>(fieldName: string, props: P) => BhdContentBlockComponentFieldProps & P;
+    bhdRoot: <T extends ElementType, P = ComponentProps<T>>(props: P) => BhdContentBlockComponentRootProps & P;
     loadingComponent: ElementType;
     ref: Ref<HTMLElement>;
 };

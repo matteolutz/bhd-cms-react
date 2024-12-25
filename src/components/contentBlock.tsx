@@ -1,4 +1,4 @@
-import { forwardRef, HTMLProps } from "react";
+import { ComponentProps, ElementType, forwardRef, HTMLProps } from "react";
 import { BhdContentBlockWithBlueprint } from "../models/contentBlock";
 import { useBhdInternalContext } from "../utils/context";
 import {
@@ -20,18 +20,34 @@ export const BhdContentBlockComponent = forwardRef<
     contentBlock.contentBlockBlueprintId,
   );
 
-  const bhdField = (fieldName: string): BhdContentBlockComponentFieldProps => ({
+  const bhdField = <T extends ElementType, P = ComponentProps<T>>(
+    fieldName: string,
+    props: P,
+  ): BhdContentBlockComponentFieldProps & P => ({
+    ...props,
     "data-bhd-field-name": fieldName,
     contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
-    onInput: (e) =>
+    onInput: (e) => {
+      // TODO: check for live
       context.onFieldChange(
         contentBlock.id,
         fieldName,
         (e.target as HTMLElement).innerText,
-      ),
+      );
+      if (
+        props &&
+        typeof props === "object" &&
+        "onInput" in props &&
+        typeof props.onInput === "function"
+      )
+        props.onInput(e);
+    },
   });
 
-  const bhdRoot = (): BhdContentBlockComponentRootProps => ({
+  const bhdRoot = <T extends ElementType, P = ComponentProps<T>>(
+    props: P,
+  ): BhdContentBlockComponentRootProps & P => ({
+    ...props,
     "data-bhd-block-id": contentBlock.id,
     ...("data-bhd-field-name" in rest
       ? {
@@ -56,7 +72,7 @@ export const BhdContentBlockComponent = forwardRef<
   }
 
   return (
-    <p {...bhdRoot()}>
+    <p {...bhdRoot<"p">({})}>
       No component was registered for the blueprint{" "}
       <strong>{contentBlock.contentBlockBlueprint.name}</strong> (ID:{" "}
       {contentBlock.contentBlockBlueprintId}).
