@@ -100,6 +100,7 @@ export const BhdContext: FC<
         }
         case "bhd-live-edit-reload": {
           // TODO: i don't like this...
+          console.log("reloading page");
           location.reload();
           break;
         }
