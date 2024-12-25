@@ -22,7 +22,8 @@ export const BhdComponent: FC<BhdComponentProps> = forwardRef<
   >({ state: "loading" });
 
   useEffect(() => {
-    console.log("reloading component");
+    setContentBlock({ state: "loading" });
+
     context
       .getContentBlock(contentBlockId)
       .then((contentBlock) =>

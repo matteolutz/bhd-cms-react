@@ -70,7 +70,7 @@ var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = useState({ state: "loading" });
   useEffect(() => {
-    console.log("reloading component");
+    setContentBlock({ state: "loading" });
     context.getContentBlock(contentBlockId).then(
       (contentBlock2) => setContentBlock({ state: "loaded", data: contentBlock2 })
     ).catch(

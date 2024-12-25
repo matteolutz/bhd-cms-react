@@ -108,7 +108,7 @@ var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, ...rest }, r
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = (0, import_react3.useState)({ state: "loading" });
   (0, import_react3.useEffect)(() => {
-    console.log("reloading component");
+    setContentBlock({ state: "loading" });
     context.getContentBlock(contentBlockId).then(
       (contentBlock2) => setContentBlock({ state: "loaded", data: contentBlock2 })
     ).catch(
