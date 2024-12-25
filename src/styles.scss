@@ -1,7 +1,7 @@
 body[data-bhd-live-edit="enabled"] *[data-bhd-block-id] {
-    border: 1px solid red;
+    box-shadow: 0px 0px 0px 5px #5ec5ff !important;
 
     &:hover {
-        border: 1px solid blue;
+        box-shadow: 0px 0px 0px 5px #ff5252 !important;
     }
 }
