@@ -203,7 +203,8 @@ var BhdContext = ({ children, options }) => {
           break;
         }
         case "bhd-live-edit-reload": {
-          setContext((prev) => ({ ...prev }));
+          location.reload();
+          break;
         }
       }
     });
