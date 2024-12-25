@@ -20,6 +20,7 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
     ...props,
     "data-bhd-field-name": fieldName,
     contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
+    suppressContentEditableWarning: true,
     ...context.liveEditEnabled ? {
       onInput: (e) => {
         context.onFieldChange(

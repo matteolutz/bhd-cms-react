@@ -58,6 +58,7 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ..
     ...props,
     "data-bhd-field-name": fieldName,
     contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
+    suppressContentEditableWarning: true,
     ...context.liveEditEnabled ? {
       onInput: (e) => {
         context.onFieldChange(

@@ -27,6 +27,7 @@ export const BhdContentBlockComponent = forwardRef<
     ...props,
     "data-bhd-field-name": fieldName,
     contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
+    suppressContentEditableWarning: true,
     ...(context.liveEditEnabled
       ? {
           onInput: (e) => {
