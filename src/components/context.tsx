@@ -75,6 +75,10 @@ export const BhdContext: FC<
   });
 
   useEffect(() => {
+    console.log("context changed");
+  }, [context]);
+
+  useEffect(() => {
     if (context.liveEditEnabled) document.body.dataset.bhdLiveEdit = "enabled";
     else document.body.dataset.bhdLiveEdit = "disabled";
   }, [context.liveEditEnabled]);

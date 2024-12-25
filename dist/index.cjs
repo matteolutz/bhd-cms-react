@@ -107,6 +107,7 @@ var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, ...rest }, r
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = (0, import_react3.useState)({ state: "loading" });
   (0, import_react3.useEffect)(() => {
+    console.log("reloading component");
     context.getContentBlock(contentBlockId).then(
       (contentBlock2) => setContentBlock({ state: "loaded", data: contentBlock2 })
     ).catch(
@@ -180,6 +181,9 @@ var BhdContext = ({ children, options }) => {
       ...options
     };
   });
+  (0, import_react4.useEffect)(() => {
+    console.log("context changed");
+  }, [context]);
   (0, import_react4.useEffect)(() => {
     if (context.liveEditEnabled) document.body.dataset.bhdLiveEdit = "enabled";
     else document.body.dataset.bhdLiveEdit = "disabled";

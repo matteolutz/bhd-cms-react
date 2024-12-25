@@ -69,6 +69,7 @@ var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = useState({ state: "loading" });
   useEffect(() => {
+    console.log("reloading component");
     context.getContentBlock(contentBlockId).then(
       (contentBlock2) => setContentBlock({ state: "loaded", data: contentBlock2 })
     ).catch(
@@ -146,6 +147,9 @@ var BhdContext = ({ children, options }) => {
       ...options
     };
   });
+  useEffect2(() => {
+    console.log("context changed");
+  }, [context]);
   useEffect2(() => {
     if (context.liveEditEnabled) document.body.dataset.bhdLiveEdit = "enabled";
     else document.body.dataset.bhdLiveEdit = "disabled";
