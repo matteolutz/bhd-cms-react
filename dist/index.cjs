@@ -183,9 +183,6 @@ var BhdContext = ({ children, options }) => {
     };
   });
   (0, import_react4.useEffect)(() => {
-    console.log("context changed");
-  }, [context]);
-  (0, import_react4.useEffect)(() => {
     if (context.liveEditEnabled) document.body.dataset.bhdLiveEdit = "enabled";
     else document.body.dataset.bhdLiveEdit = "disabled";
   }, [context.liveEditEnabled]);
@@ -208,6 +205,7 @@ var BhdContext = ({ children, options }) => {
           break;
         }
         case "bhd-live-edit-reload": {
+          setDirtyLiveFields({});
           setContext((prev) => ({ ...prev }));
           break;
         }

@@ -75,10 +75,6 @@ export const BhdContext: FC<
   });
 
   useEffect(() => {
-    console.log("context changed");
-  }, [context]);
-
-  useEffect(() => {
     if (context.liveEditEnabled) document.body.dataset.bhdLiveEdit = "enabled";
     else document.body.dataset.bhdLiveEdit = "disabled";
   }, [context.liveEditEnabled]);
@@ -105,6 +101,7 @@ export const BhdContext: FC<
         case "bhd-live-edit-reload": {
           // TODO: i don't like this...
           // location.reload();
+          setDirtyLiveFields({});
           setContext((prev) => ({ ...prev }));
           break;
         }
