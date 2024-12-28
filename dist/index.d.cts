@@ -37,7 +37,7 @@ type BhdContentBlockComponentRootProps = {
     "data-bhd-block-id": string;
     "data-bhd-block-parent-field-name"?: string;
 };
-type BhdContentBlockComponentProps<T extends object> = {
+type BhdContentBlockComponentProps<T extends object = object> = {
     contentBlock: BhdContentBlockWithBlueprint;
     bhdField: <T extends ElementType, P = ComponentProps<T>>(fieldName: string, props: P) => BhdContentBlockComponentFieldProps & P;
     bhdRoot: <T extends ElementType, P = ComponentProps<T>>(props: P) => BhdContentBlockComponentRootProps & P;

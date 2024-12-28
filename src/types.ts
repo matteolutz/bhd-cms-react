@@ -10,7 +10,7 @@ export type BhdContentBlockComponentRootProps = {
   "data-bhd-block-parent-field-name"?: string;
 };
 
-export type BhdContentBlockComponentProps<T extends object> = {
+export type BhdContentBlockComponentProps<T extends object = object> = {
   contentBlock: BhdContentBlockWithBlueprint;
   bhdField: <T extends ElementType, P = ComponentProps<T>>(
     fieldName: string,
