@@ -153,6 +153,7 @@ var BhdContext = ({ children, options }) => {
     else document.body.dataset.bhdLiveEdit = "disabled";
   }, [context.liveEditEnabled]);
   useEffect2(() => {
+    window.top?.postMessage({ bhd: true, type: "bhd-ready" }, "*");
     window.addEventListener("message", (e) => {
       if (!("bhd" in e.data)) return;
       switch (e.data.type) {

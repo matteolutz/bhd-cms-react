@@ -80,6 +80,8 @@ export const BhdContext: FC<
   }, [context.liveEditEnabled]);
 
   useEffect(() => {
+    window.top?.postMessage({ bhd: true, type: "bhd-ready" }, "*");
+
     window.addEventListener("message", (e) => {
       if (!("bhd" in e.data)) return;
 
