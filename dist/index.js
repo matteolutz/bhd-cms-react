@@ -110,6 +110,7 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 // src/components/context.tsx
 import { jsx as jsx3 } from "react/jsx-runtime";
 var BhdContext = ({ children, options }) => {
+  console.log("[BHD-CLIENT] rendering context...");
   const [dirtyLiveFields, setDirtyLiveFields] = useState2({});
   const dirtyFieldsRef = useRef(dirtyLiveFields);
   useEffect2(() => {

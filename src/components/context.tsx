@@ -22,6 +22,7 @@ export type BhdContextOptions = {
 export const BhdContext: FC<
   PropsWithChildren<{ options: BhdContextOptions }>
 > = ({ children, options }) => {
+  console.log("[BHD-CLIENT] rendering context...");
   const [dirtyLiveFields, setDirtyLiveFields] = useState<
     Record<string, Record<string, unknown>>
   >({});
