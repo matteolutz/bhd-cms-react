@@ -1,7 +1,9 @@
+import * as react from 'react';
 import { FC, HTMLProps, ElementType, ComponentProps, Ref, PropsWithChildren } from 'react';
 
-type BhdComponentProps = {
+type BhdComponentProps<T extends object = any> = {
     contentBlockId: string;
+    options?: T;
 };
 declare const BhdComponent: FC<BhdComponentProps>;
 
@@ -35,19 +37,22 @@ type BhdContentBlockComponentRootProps = {
     "data-bhd-block-id": string;
     "data-bhd-block-parent-field-name"?: string;
 };
-type BhdContentBlockComponentProps = {
+type BhdContentBlockComponentProps<T extends object> = {
     contentBlock: BhdContentBlockWithBlueprint;
     bhdField: <T extends ElementType, P = ComponentProps<T>>(fieldName: string, props: P) => BhdContentBlockComponentFieldProps & P;
     bhdRoot: <T extends ElementType, P = ComponentProps<T>>(props: P) => BhdContentBlockComponentRootProps & P;
     loadingComponent: ElementType;
     ref: Ref<HTMLElement>;
+    options?: T;
 };
-type BhdBlueprintLut = Record<string, ElementType<BhdContentBlockComponentProps>>;
+type BhdBlueprintLut = Record<string, ElementType<BhdContentBlockComponentProps<any>>>;
 
-type BhdInlineComponentProps = BhdComponentProps & {
-    children: FC<BhdContentBlockComponentProps>;
+type BhdInlineComponentProps<T extends object = any> = BhdComponentProps<T> & {
+    children: FC<BhdContentBlockComponentProps<any>>;
 };
-declare const BhdInlineComponent: FC<BhdInlineComponentProps>;
+declare const BhdInlineComponent: react.ForwardRefExoticComponent<Omit<BhdComponentProps<any> & {
+    children: FC<BhdContentBlockComponentProps<any>>;
+} & Omit<HTMLProps<HTMLElement>, "children">, "ref"> & react.RefAttributes<HTMLElement>>;
 
 type BhdContextOptions = {
     accessToken: string;

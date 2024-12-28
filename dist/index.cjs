@@ -50,7 +50,7 @@ var useBhdInternalContext = () => (0, import_react.useContext)(BhdInternalContex
 // src/components/contentBlock.tsx
 var import_react2 = require("react");
 var import_jsx_runtime = require("react/jsx-runtime");
-var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, inlineComponent, ...rest }, ref) => {
+var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, inlineComponent, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const Component = inlineComponent ?? context.getBlueprintComponent(contentBlock.contentBlockBlueprintId);
   const bhdField = (fieldName, props) => ({
@@ -86,6 +86,7 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, in
         contentBlock,
         bhdField,
         bhdRoot,
+        options,
         ...rest
       }
     );
@@ -103,7 +104,7 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, in
 
 // src/components/bhd.tsx
 var import_jsx_runtime2 = require("react/jsx-runtime");
-var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, ...rest }, ref) => {
+var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = (0, import_react3.useState)({ state: "loading" });
   (0, import_react3.useEffect)(() => {
@@ -128,6 +129,7 @@ var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, ...rest }, r
     {
       ref,
       contentBlock: contentBlock.data,
+      options,
       ...rest
     }
   );
@@ -136,7 +138,7 @@ var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, ...rest }, r
 // src/components/inline.tsx
 var import_react4 = require("react");
 var import_jsx_runtime3 = require("react/jsx-runtime");
-var BhdInlineComponent = (0, import_react4.forwardRef)(({ contentBlockId, children, ...rest }, ref) => {
+var BhdInlineComponent = (0, import_react4.forwardRef)(({ contentBlockId, children, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = (0, import_react4.useState)({ state: "loading" });
   (0, import_react4.useEffect)(() => {
@@ -162,6 +164,7 @@ var BhdInlineComponent = (0, import_react4.forwardRef)(({ contentBlockId, childr
       inlineComponent: children,
       ref,
       contentBlock: contentBlock.data,
+      options,
       ...rest
     }
   );

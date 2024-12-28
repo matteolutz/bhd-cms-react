@@ -10,7 +10,7 @@ export type BhdContentBlockComponentRootProps = {
   "data-bhd-block-parent-field-name"?: string;
 };
 
-export type BhdContentBlockComponentProps = {
+export type BhdContentBlockComponentProps<T extends object> = {
   contentBlock: BhdContentBlockWithBlueprint;
   bhdField: <T extends ElementType, P = ComponentProps<T>>(
     fieldName: string,
@@ -21,9 +21,11 @@ export type BhdContentBlockComponentProps = {
   ) => BhdContentBlockComponentRootProps & P;
   loadingComponent: ElementType;
   ref: Ref<HTMLElement>;
+  options?: T;
 };
 
 export type BhdBlueprintLut = Record<
   string,
-  ElementType<BhdContentBlockComponentProps>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ElementType<BhdContentBlockComponentProps<any>>
 >;

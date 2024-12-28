@@ -7,15 +7,17 @@ import {
   BhdContentBlockComponentRootProps,
 } from "../types";
 
-export type BhdContentBlockInternalComponentProps = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type BhdContentBlockInternalComponentProps<T extends object = any> = {
   contentBlock: BhdContentBlockWithBlueprint;
-  inlineComponent?: FC<BhdContentBlockComponentProps>;
+  options: T;
+  inlineComponent?: FC<BhdContentBlockComponentProps<T>>;
 };
 
 export const BhdContentBlockComponent = forwardRef<
   HTMLElement,
   BhdContentBlockInternalComponentProps & HTMLProps<HTMLElement>
->(({ contentBlock, inlineComponent, ...rest }, ref) => {
+>(({ contentBlock, inlineComponent, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
 
   const Component =
@@ -73,6 +75,7 @@ export const BhdContentBlockComponent = forwardRef<
         contentBlock={contentBlock}
         bhdField={bhdField}
         bhdRoot={bhdRoot}
+        options={options}
         {...rest}
       />
     );

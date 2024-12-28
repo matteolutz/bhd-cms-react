@@ -3,14 +3,16 @@ import { useBhdInternalContext } from "../utils/context";
 import { BhdContentBlockWithBlueprint } from "../models/contentBlock";
 import { BhdContentBlockComponent } from "./contentBlock";
 
-export type BhdComponentProps = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type BhdComponentProps<T extends object = any> = {
   contentBlockId: string;
+  options?: T;
 };
 
 export const BhdComponent: FC<BhdComponentProps> = forwardRef<
   HTMLElement,
   BhdComponentProps & HTMLProps<HTMLElement>
->(({ contentBlockId, ...rest }, ref) => {
+>(({ contentBlockId, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
 
   const [contentBlock, setContentBlock] = useState<
@@ -47,6 +49,7 @@ export const BhdComponent: FC<BhdComponentProps> = forwardRef<
     <BhdContentBlockComponent
       ref={ref}
       contentBlock={contentBlock.data}
+      options={options}
       {...rest}
     />
   );

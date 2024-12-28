@@ -11,7 +11,7 @@ var useBhdInternalContext = () => useContext(BhdInternalContext);
 // src/components/contentBlock.tsx
 import { forwardRef } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
-var BhdContentBlockComponent = forwardRef(({ contentBlock, inlineComponent, ...rest }, ref) => {
+var BhdContentBlockComponent = forwardRef(({ contentBlock, inlineComponent, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const Component = inlineComponent ?? context.getBlueprintComponent(contentBlock.contentBlockBlueprintId);
   const bhdField = (fieldName, props) => ({
@@ -47,6 +47,7 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, inlineComponent, ...r
         contentBlock,
         bhdField,
         bhdRoot,
+        options,
         ...rest
       }
     );
@@ -64,7 +65,7 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, inlineComponent, ...r
 
 // src/components/bhd.tsx
 import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
-var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
+var BhdComponent = forwardRef2(({ contentBlockId, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = useState({ state: "loading" });
   useEffect(() => {
@@ -89,6 +90,7 @@ var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
     {
       ref,
       contentBlock: contentBlock.data,
+      options,
       ...rest
     }
   );
@@ -97,7 +99,7 @@ var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
 // src/components/inline.tsx
 import { forwardRef as forwardRef3, useEffect as useEffect2, useState as useState2 } from "react";
 import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
-var BhdInlineComponent = forwardRef3(({ contentBlockId, children, ...rest }, ref) => {
+var BhdInlineComponent = forwardRef3(({ contentBlockId, children, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = useState2({ state: "loading" });
   useEffect2(() => {
@@ -123,6 +125,7 @@ var BhdInlineComponent = forwardRef3(({ contentBlockId, children, ...rest }, ref
       inlineComponent: children,
       ref,
       contentBlock: contentBlock.data,
+      options,
       ...rest
     }
   );
