@@ -11,11 +11,9 @@ var useBhdInternalContext = () => useContext(BhdInternalContext);
 // src/components/contentBlock.tsx
 import { forwardRef } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
-var BhdContentBlockComponent = forwardRef(({ contentBlock, ...rest }, ref) => {
+var BhdContentBlockComponent = forwardRef(({ contentBlock, inlineComponent, ...rest }, ref) => {
   const context = useBhdInternalContext();
-  const Component = context.getBlueprintComponent(
-    contentBlock.contentBlockBlueprintId
-  );
+  const Component = inlineComponent ?? context.getBlueprintComponent(contentBlock.contentBlockBlueprintId);
   const bhdField = (fieldName, props) => ({
     ...props,
     "data-bhd-field-name": fieldName,
@@ -96,11 +94,45 @@ var BhdComponent = forwardRef2(({ contentBlockId, ...rest }, ref) => {
   );
 });
 
+// src/components/inline.tsx
+import { forwardRef as forwardRef3, useEffect as useEffect2, useState as useState2 } from "react";
+import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
+var BhdInlineComponent = forwardRef3(({ contentBlockId, children, ...rest }, ref) => {
+  const context = useBhdInternalContext();
+  const [contentBlock, setContentBlock] = useState2({ state: "loading" });
+  useEffect2(() => {
+    setContentBlock({ state: "loading" });
+    context.getContentBlock(contentBlockId).then(
+      (contentBlock2) => setContentBlock({ state: "loaded", data: contentBlock2 })
+    ).catch(
+      (error) => setContentBlock({ state: "failed", reason: "" + error })
+    );
+  }, [contentBlockId, context]);
+  if (contentBlock.state === "loading") {
+    return /* @__PURE__ */ jsx3(context.loadingComponent, { ...rest });
+  }
+  if (contentBlock.state === "failed") {
+    return /* @__PURE__ */ jsxs3("div", { ...rest, children: [
+      "Error: ",
+      contentBlock.reason
+    ] });
+  }
+  return /* @__PURE__ */ jsx3(
+    BhdContentBlockComponent,
+    {
+      inlineComponent: children,
+      ref,
+      contentBlock: contentBlock.data,
+      ...rest
+    }
+  );
+});
+
 // src/components/context.tsx
 import {
-  useEffect as useEffect2,
+  useEffect as useEffect3,
   useRef,
-  useState as useState2
+  useState as useState3
 } from "react";
 import axios from "axios";
 
@@ -108,14 +140,14 @@ import axios from "axios";
 var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 
 // src/components/context.tsx
-import { jsx as jsx3 } from "react/jsx-runtime";
+import { jsx as jsx4 } from "react/jsx-runtime";
 var BhdContext = ({ children, options }) => {
-  const [dirtyLiveFields, setDirtyLiveFields] = useState2({});
+  const [dirtyLiveFields, setDirtyLiveFields] = useState3({});
   const dirtyFieldsRef = useRef(dirtyLiveFields);
-  useEffect2(() => {
+  useEffect3(() => {
     dirtyFieldsRef.current = dirtyLiveFields;
   }, [dirtyLiveFields]);
-  const [context, setContext] = useState2(() => {
+  const [context, setContext] = useState3(() => {
     const axiosInstance = axios.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
       headers: {
@@ -134,7 +166,7 @@ var BhdContext = ({ children, options }) => {
       ).href,
       getContentBlock: (id) => context.axiosInstance.get(`/block/${id}`).then((res) => res.data.block),
       getBlueprintComponent: (id) => context.blueprintLut[id],
-      loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ jsx3("p", { children: "Loading..." })),
+      loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ jsx4("p", { children: "Loading..." })),
       liveEditEnabled: false,
       onFieldChange: (blockId, fieldName, value) => {
         setDirtyLiveFields({
@@ -148,11 +180,11 @@ var BhdContext = ({ children, options }) => {
       ...options
     };
   });
-  useEffect2(() => {
+  useEffect3(() => {
     if (context.liveEditEnabled) document.body.dataset.bhdLiveEdit = "enabled";
     else document.body.dataset.bhdLiveEdit = "disabled";
   }, [context.liveEditEnabled]);
-  useEffect2(() => {
+  useEffect3(() => {
     window.top?.postMessage({ bhd: true, type: "bhd-ready" }, "*");
     window.addEventListener("message", (e) => {
       if (!("bhd" in e.data)) return;
@@ -179,7 +211,7 @@ var BhdContext = ({ children, options }) => {
       }
     });
   }, []);
-  return /* @__PURE__ */ jsx3(BhdInternalContext.Provider, { value: context, children });
+  return /* @__PURE__ */ jsx4(BhdInternalContext.Provider, { value: context, children });
 };
 
 // src/utils/index.ts
@@ -195,6 +227,7 @@ var useBhdContext = () => {
 export {
   BhdComponent,
   BhdContext,
+  BhdInlineComponent,
   useBhdContext
 };
 //# sourceMappingURL=index.js.map

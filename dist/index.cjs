@@ -32,6 +32,7 @@ var src_exports = {};
 __export(src_exports, {
   BhdComponent: () => BhdComponent,
   BhdContext: () => BhdContext,
+  BhdInlineComponent: () => BhdInlineComponent,
   useBhdContext: () => useBhdContext
 });
 module.exports = __toCommonJS(src_exports);
@@ -49,11 +50,9 @@ var useBhdInternalContext = () => (0, import_react.useContext)(BhdInternalContex
 // src/components/contentBlock.tsx
 var import_react2 = require("react");
 var import_jsx_runtime = require("react/jsx-runtime");
-var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, ...rest }, ref) => {
+var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, inlineComponent, ...rest }, ref) => {
   const context = useBhdInternalContext();
-  const Component = context.getBlueprintComponent(
-    contentBlock.contentBlockBlueprintId
-  );
+  const Component = inlineComponent ?? context.getBlueprintComponent(contentBlock.contentBlockBlueprintId);
   const bhdField = (fieldName, props) => ({
     ...props,
     "data-bhd-field-name": fieldName,
@@ -134,22 +133,56 @@ var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, ...rest }, r
   );
 });
 
-// src/components/context.tsx
+// src/components/inline.tsx
 var import_react4 = require("react");
+var import_jsx_runtime3 = require("react/jsx-runtime");
+var BhdInlineComponent = (0, import_react4.forwardRef)(({ contentBlockId, children, ...rest }, ref) => {
+  const context = useBhdInternalContext();
+  const [contentBlock, setContentBlock] = (0, import_react4.useState)({ state: "loading" });
+  (0, import_react4.useEffect)(() => {
+    setContentBlock({ state: "loading" });
+    context.getContentBlock(contentBlockId).then(
+      (contentBlock2) => setContentBlock({ state: "loaded", data: contentBlock2 })
+    ).catch(
+      (error) => setContentBlock({ state: "failed", reason: "" + error })
+    );
+  }, [contentBlockId, context]);
+  if (contentBlock.state === "loading") {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(context.loadingComponent, { ...rest });
+  }
+  if (contentBlock.state === "failed") {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { ...rest, children: [
+      "Error: ",
+      contentBlock.reason
+    ] });
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+    BhdContentBlockComponent,
+    {
+      inlineComponent: children,
+      ref,
+      contentBlock: contentBlock.data,
+      ...rest
+    }
+  );
+});
+
+// src/components/context.tsx
+var import_react5 = require("react");
 var import_axios = __toESM(require("axios"), 1);
 
 // src/utils/url.ts
 var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 
 // src/components/context.tsx
-var import_jsx_runtime3 = require("react/jsx-runtime");
+var import_jsx_runtime4 = require("react/jsx-runtime");
 var BhdContext = ({ children, options }) => {
-  const [dirtyLiveFields, setDirtyLiveFields] = (0, import_react4.useState)({});
-  const dirtyFieldsRef = (0, import_react4.useRef)(dirtyLiveFields);
-  (0, import_react4.useEffect)(() => {
+  const [dirtyLiveFields, setDirtyLiveFields] = (0, import_react5.useState)({});
+  const dirtyFieldsRef = (0, import_react5.useRef)(dirtyLiveFields);
+  (0, import_react5.useEffect)(() => {
     dirtyFieldsRef.current = dirtyLiveFields;
   }, [dirtyLiveFields]);
-  const [context, setContext] = (0, import_react4.useState)(() => {
+  const [context, setContext] = (0, import_react5.useState)(() => {
     const axiosInstance = import_axios.default.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
       headers: {
@@ -168,7 +201,7 @@ var BhdContext = ({ children, options }) => {
       ).href,
       getContentBlock: (id) => context.axiosInstance.get(`/block/${id}`).then((res) => res.data.block),
       getBlueprintComponent: (id) => context.blueprintLut[id],
-      loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { children: "Loading..." })),
+      loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: "Loading..." })),
       liveEditEnabled: false,
       onFieldChange: (blockId, fieldName, value) => {
         setDirtyLiveFields({
@@ -182,11 +215,11 @@ var BhdContext = ({ children, options }) => {
       ...options
     };
   });
-  (0, import_react4.useEffect)(() => {
+  (0, import_react5.useEffect)(() => {
     if (context.liveEditEnabled) document.body.dataset.bhdLiveEdit = "enabled";
     else document.body.dataset.bhdLiveEdit = "disabled";
   }, [context.liveEditEnabled]);
-  (0, import_react4.useEffect)(() => {
+  (0, import_react5.useEffect)(() => {
     window.top?.postMessage({ bhd: true, type: "bhd-ready" }, "*");
     window.addEventListener("message", (e) => {
       if (!("bhd" in e.data)) return;
@@ -213,7 +246,7 @@ var BhdContext = ({ children, options }) => {
       }
     });
   }, []);
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(BhdInternalContext.Provider, { value: context, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(BhdInternalContext.Provider, { value: context, children });
 };
 
 // src/utils/index.ts
@@ -230,6 +263,7 @@ var useBhdContext = () => {
 0 && (module.exports = {
   BhdComponent,
   BhdContext,
+  BhdInlineComponent,
   useBhdContext
 });
 //# sourceMappingURL=index.cjs.map

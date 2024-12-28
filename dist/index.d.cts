@@ -44,6 +44,11 @@ type BhdContentBlockComponentProps = {
 };
 type BhdBlueprintLut = Record<string, ElementType<BhdContentBlockComponentProps>>;
 
+type BhdInlineComponentProps = BhdComponentProps & {
+    children: FC<BhdContentBlockComponentProps>;
+};
+declare const BhdInlineComponent: FC<BhdInlineComponentProps>;
+
 type BhdContextOptions = {
     accessToken: string;
     baseUrl?: string;
@@ -63,4 +68,4 @@ type BhdContextType = {
 
 declare const useBhdContext: () => BhdContextType;
 
-export { type BhdBlueprintLut, BhdComponent, type BhdComponentProps, type BhdContentBlock, type BhdContentBlockBlueprint, type BhdContentBlockComponentFieldProps, type BhdContentBlockComponentProps, type BhdContentBlockComponentRootProps, type BhdContentBlockWithBlueprint, BhdContext, type BhdContextOptions, type BhdContextType, useBhdContext };
+export { type BhdBlueprintLut, BhdComponent, type BhdComponentProps, type BhdContentBlock, type BhdContentBlockBlueprint, type BhdContentBlockComponentFieldProps, type BhdContentBlockComponentProps, type BhdContentBlockComponentRootProps, type BhdContentBlockWithBlueprint, BhdContext, type BhdContextOptions, type BhdContextType, BhdInlineComponent, type BhdInlineComponentProps, useBhdContext };
