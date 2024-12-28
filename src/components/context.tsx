@@ -22,7 +22,6 @@ export type BhdContextOptions = {
 export const BhdContext: FC<
   PropsWithChildren<{ options: BhdContextOptions }>
 > = ({ children, options }) => {
-  console.log("[BHD-CLIENT] rendering context...");
   const [dirtyLiveFields, setDirtyLiveFields] = useState<
     Record<string, Record<string, unknown>>
   >({});
@@ -81,7 +80,6 @@ export const BhdContext: FC<
   }, [context.liveEditEnabled]);
 
   useEffect(() => {
-    console.log("[BHD-CLIENT] initial render, window top is", window.top);
     window.top?.postMessage({ bhd: true, type: "bhd-ready" }, "*");
 
     window.addEventListener("message", (e) => {

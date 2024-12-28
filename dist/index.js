@@ -110,7 +110,6 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 // src/components/context.tsx
 import { jsx as jsx3 } from "react/jsx-runtime";
 var BhdContext = ({ children, options }) => {
-  console.log("[BHD-CLIENT] rendering context...");
   const [dirtyLiveFields, setDirtyLiveFields] = useState2({});
   const dirtyFieldsRef = useRef(dirtyLiveFields);
   useEffect2(() => {
@@ -154,7 +153,6 @@ var BhdContext = ({ children, options }) => {
     else document.body.dataset.bhdLiveEdit = "disabled";
   }, [context.liveEditEnabled]);
   useEffect2(() => {
-    console.log("[BHD-CLIENT] initial render, window top is", window.top);
     window.top?.postMessage({ bhd: true, type: "bhd-ready" }, "*");
     window.addEventListener("message", (e) => {
       if (!("bhd" in e.data)) return;
