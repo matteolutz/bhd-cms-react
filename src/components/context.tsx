@@ -80,6 +80,7 @@ export const BhdContext: FC<
   }, [context.liveEditEnabled]);
 
   useEffect(() => {
+    console.log("[BHD-CLIENT] initial render, window top is", window.top);
     window.top?.postMessage({ bhd: true, type: "bhd-ready" }, "*");
 
     window.addEventListener("message", (e) => {
