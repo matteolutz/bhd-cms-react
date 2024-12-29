@@ -48,7 +48,7 @@ export const BhdContext: FC<
         window.top?.postMessage(
           {
             bhd: true,
-            type: "bhd-live-field-click",
+            type: "bhd-live-edit-field-click",
             field: { blockId, fieldName },
           },
           "*",
