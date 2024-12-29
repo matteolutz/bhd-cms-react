@@ -59,7 +59,7 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, inlineComponent, opti
 });
 
 // src/components/bhd.tsx
-import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx as jsx2 } from "react/jsx-runtime";
 var BhdComponent = forwardRef2(({ contentBlockId, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = useState({ state: "loading" });
@@ -75,10 +75,13 @@ var BhdComponent = forwardRef2(({ contentBlockId, options, ...rest }, ref) => {
     return /* @__PURE__ */ jsx2(context.loadingComponent, { ...rest });
   }
   if (contentBlock.state === "failed") {
-    return /* @__PURE__ */ jsxs2("div", { ...rest, children: [
-      "Error: ",
-      contentBlock.reason
-    ] });
+    return /* @__PURE__ */ jsx2(
+      context.errorComnponent,
+      {
+        ...rest,
+        error: { type: "component-load-failed", reason: contentBlock.reason }
+      }
+    );
   }
   return /* @__PURE__ */ jsx2(
     BhdContentBlockComponent,
@@ -93,7 +96,7 @@ var BhdComponent = forwardRef2(({ contentBlockId, options, ...rest }, ref) => {
 
 // src/components/inline.tsx
 import { forwardRef as forwardRef3, useEffect as useEffect2, useState as useState2 } from "react";
-import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
+import { jsx as jsx3, jsxs as jsxs2 } from "react/jsx-runtime";
 var BhdInlineComponent = forwardRef3(({ contentBlockId, children, options, ...rest }, ref) => {
   const context = useBhdInternalContext();
   const [contentBlock, setContentBlock] = useState2({ state: "loading" });
@@ -109,7 +112,7 @@ var BhdInlineComponent = forwardRef3(({ contentBlockId, children, options, ...re
     return /* @__PURE__ */ jsx3(context.loadingComponent, { ...rest });
   }
   if (contentBlock.state === "failed") {
-    return /* @__PURE__ */ jsxs3("div", { ...rest, children: [
+    return /* @__PURE__ */ jsxs2("div", { ...rest, children: [
       "Error: ",
       contentBlock.reason
     ] });
@@ -134,7 +137,7 @@ import axios from "axios";
 var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 
 // src/components/context.tsx
-import { jsx as jsx4 } from "react/jsx-runtime";
+import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
 var BhdContext = ({ children, options }) => {
   const [context, setContext] = useState3(() => {
     const axiosInstance = axios.create({
@@ -156,6 +159,12 @@ var BhdContext = ({ children, options }) => {
       getContentBlock: (id) => context.axiosInstance.get(`/block/${id}`).then((res) => res.data.block),
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ jsx4("p", { children: "Loading..." })),
+      errorComnponent: options.errorComponent ?? (({ error }) => /* @__PURE__ */ jsxs3("div", { children: [
+        "Error (",
+        error.type,
+        "): ",
+        "" + error.reason
+      ] })),
       liveEditEnabled: false,
       onFieldClick: (blockId, fieldName) => {
         window.top?.postMessage(

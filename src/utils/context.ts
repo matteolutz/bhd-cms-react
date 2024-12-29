@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import { createContext, ElementType, useContext } from "react";
 import { BhdContentBlockWithBlueprint } from "../models/contentBlock";
-import { BhdBlueprintLut } from "../types";
+import { BhdBlueprintLut, BhdError } from "../types";
 
 export type BhdContextType = {
   accessToken: string;
@@ -18,6 +18,7 @@ export type BhdInternalContextType = BhdContextType & {
   onFieldClick: (blockId: string, fieldName: string) => void;
 
   loadingComponent: ElementType;
+  errorComnponent: ElementType<{ error: BhdError }>;
 
   liveEditEnabled: boolean;
 };

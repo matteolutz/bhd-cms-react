@@ -29,3 +29,13 @@ export type BhdBlueprintLut = Record<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ElementType<BhdContentBlockComponentProps<any>>
 >;
+
+export type BhdError =
+  | {
+      type: "component-load-failed";
+      reason: string;
+    }
+  | {
+      type: "unknown";
+      reason: unknown;
+    };

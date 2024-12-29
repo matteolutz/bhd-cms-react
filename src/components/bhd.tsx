@@ -41,8 +41,12 @@ export const BhdComponent: FC<BhdComponentProps> = forwardRef<
   }
 
   if (contentBlock.state === "failed") {
-    // TODO: custom error component
-    return <div {...rest}>Error: {contentBlock.reason}</div>;
+    return (
+      <context.errorComnponent
+        {...rest}
+        error={{ type: "component-load-failed", reason: contentBlock.reason }}
+      />
+    );
   }
 
   return (

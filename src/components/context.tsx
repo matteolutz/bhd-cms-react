@@ -3,13 +3,14 @@ import { BhdInternalContext, BhdInternalContextType } from "../utils/context";
 import axios from "axios";
 import { DEFAULT_BASE_URL } from "../utils/url";
 import { BhdContentBlockWithBlueprint } from "../models/contentBlock";
-import { BhdBlueprintLut } from "../types";
+import { BhdBlueprintLut, BhdError } from "../types";
 
 export type BhdContextOptions = {
   accessToken: string;
   baseUrl?: string;
   blueprintLut: BhdBlueprintLut;
   loadingComponent?: ElementType;
+  errorComponent?: ElementType<{ error: BhdError }>;
 };
 
 export const BhdContext: FC<
@@ -43,6 +44,13 @@ export const BhdContext: FC<
         id: string,
       ): BhdBlueprintLut[keyof BhdBlueprintLut] => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => <p>Loading...</p>),
+      errorComnponent:
+        options.errorComponent ??
+        (({ error }) => (
+          <div>
+            Error ({error.type}): {"" + error.reason}
+          </div>
+        )),
       liveEditEnabled: false,
       onFieldClick: (blockId: string, fieldName: string) => {
         window.top?.postMessage(

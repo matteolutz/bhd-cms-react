@@ -46,6 +46,13 @@ type BhdContentBlockComponentProps<T extends object = object> = {
     options?: T;
 };
 type BhdBlueprintLut = Record<string, ElementType<BhdContentBlockComponentProps<any>>>;
+type BhdError = {
+    type: "component-load-failed";
+    reason: string;
+} | {
+    type: "unknown";
+    reason: unknown;
+};
 
 type BhdInlineComponentProps<T extends object = any> = BhdComponentProps<T> & {
     children: FC<BhdContentBlockComponentProps<any>>;
@@ -59,6 +66,9 @@ type BhdContextOptions = {
     baseUrl?: string;
     blueprintLut: BhdBlueprintLut;
     loadingComponent?: ElementType;
+    errorComponent?: ElementType<{
+        error: BhdError;
+    }>;
 };
 declare const BhdContext: FC<PropsWithChildren<{
     options: BhdContextOptions;
@@ -73,4 +83,4 @@ type BhdContextType = {
 
 declare const useBhdContext: () => BhdContextType;
 
-export { type BhdBlueprintLut, BhdComponent, type BhdComponentProps, type BhdContentBlock, type BhdContentBlockBlueprint, type BhdContentBlockComponentFieldProps, type BhdContentBlockComponentProps, type BhdContentBlockComponentRootProps, type BhdContentBlockWithBlueprint, BhdContext, type BhdContextOptions, type BhdContextType, BhdInlineComponent, type BhdInlineComponentProps, useBhdContext };
+export { type BhdBlueprintLut, BhdComponent, type BhdComponentProps, type BhdContentBlock, type BhdContentBlockBlueprint, type BhdContentBlockComponentFieldProps, type BhdContentBlockComponentProps, type BhdContentBlockComponentRootProps, type BhdContentBlockWithBlueprint, BhdContext, type BhdContextOptions, type BhdContextType, type BhdError, BhdInlineComponent, type BhdInlineComponentProps, useBhdContext };

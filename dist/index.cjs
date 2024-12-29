@@ -114,10 +114,13 @@ var BhdComponent = (0, import_react3.forwardRef)(({ contentBlockId, options, ...
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(context.loadingComponent, { ...rest });
   }
   if (contentBlock.state === "failed") {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { ...rest, children: [
-      "Error: ",
-      contentBlock.reason
-    ] });
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      context.errorComnponent,
+      {
+        ...rest,
+        error: { type: "component-load-failed", reason: contentBlock.reason }
+      }
+    );
   }
   return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
     BhdContentBlockComponent,
@@ -195,6 +198,12 @@ var BhdContext = ({ children, options }) => {
       getContentBlock: (id) => context.axiosInstance.get(`/block/${id}`).then((res) => res.data.block),
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: "Loading..." })),
+      errorComnponent: options.errorComponent ?? (({ error }) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { children: [
+        "Error (",
+        error.type,
+        "): ",
+        "" + error.reason
+      ] })),
       liveEditEnabled: false,
       onFieldClick: (blockId, fieldName) => {
         window.top?.postMessage(
