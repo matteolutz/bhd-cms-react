@@ -30,24 +30,18 @@ export const BhdContentBlockComponent = forwardRef<
   ): BhdContentBlockComponentFieldProps & P => ({
     ...props,
     "data-bhd-field-name": fieldName,
-    contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
-    suppressContentEditableWarning: true,
     ...(context.liveEditEnabled
       ? {
-          onInput: (e) => {
-            // TODO: check for live
-            context.onFieldChange(
-              contentBlock.id,
-              fieldName,
-              (e.target as HTMLElement).innerText,
-            );
+          onClick: (e) => {
+            context.onFieldClick(contentBlock.id, fieldName);
+
             if (
               props &&
               typeof props === "object" &&
-              "onInput" in props &&
-              typeof props.onInput === "function"
+              "onClick" in props &&
+              typeof props.onClick === "function"
             )
-              props.onInput(e);
+              props.onClick(e);
           },
         }
       : {}),

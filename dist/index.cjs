@@ -56,17 +56,11 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, in
   const bhdField = (fieldName, props) => ({
     ...props,
     "data-bhd-field-name": fieldName,
-    contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
-    suppressContentEditableWarning: true,
     ...context.liveEditEnabled ? {
-      onInput: (e) => {
-        context.onFieldChange(
-          contentBlock.id,
-          fieldName,
-          e.target.innerText
-        );
-        if (props && typeof props === "object" && "onInput" in props && typeof props.onInput === "function")
-          props.onInput(e);
+      onClick: (e) => {
+        context.onFieldClick(contentBlock.id, fieldName);
+        if (props && typeof props === "object" && "onClick" in props && typeof props.onClick === "function")
+          props.onClick(e);
       }
     } : {}
   });
@@ -180,11 +174,6 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 // src/components/context.tsx
 var import_jsx_runtime4 = require("react/jsx-runtime");
 var BhdContext = ({ children, options }) => {
-  const [dirtyLiveFields, setDirtyLiveFields] = (0, import_react5.useState)({});
-  const dirtyFieldsRef = (0, import_react5.useRef)(dirtyLiveFields);
-  (0, import_react5.useEffect)(() => {
-    dirtyFieldsRef.current = dirtyLiveFields;
-  }, [dirtyLiveFields]);
   const [context, setContext] = (0, import_react5.useState)(() => {
     const axiosInstance = import_axios.default.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
@@ -206,14 +195,15 @@ var BhdContext = ({ children, options }) => {
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: "Loading..." })),
       liveEditEnabled: false,
-      onFieldChange: (blockId, fieldName, value) => {
-        setDirtyLiveFields({
-          ...dirtyLiveFields,
-          [blockId]: {
-            ...dirtyLiveFields[blockId] ?? {},
-            [fieldName]: value
-          }
-        });
+      onFieldClick: (blockId, fieldName) => {
+        window.top?.postMessage(
+          {
+            bhd: true,
+            type: "bhd-live-field-click",
+            field: { blockId, fieldName }
+          },
+          "*"
+        );
       },
       ...options
     };
@@ -230,19 +220,7 @@ var BhdContext = ({ children, options }) => {
         case "bhd-live-edit":
           setContext((prev) => ({ ...prev, liveEditEnabled: true }));
           break;
-        case "bhd-live-edit-save": {
-          window.top?.postMessage(
-            {
-              bhd: true,
-              type: "bhd-live-edit-save-result",
-              dirtyFields: dirtyFieldsRef.current
-            },
-            "*"
-          );
-          break;
-        }
         case "bhd-live-edit-reload": {
-          setDirtyLiveFields({});
           setContext((prev) => ({ ...prev }));
           break;
         }

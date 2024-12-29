@@ -1,11 +1,4 @@
-import {
-  ElementType,
-  FC,
-  PropsWithChildren,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ElementType, FC, PropsWithChildren, useEffect, useState } from "react";
 import { BhdInternalContext, BhdInternalContextType } from "../utils/context";
 import axios from "axios";
 import { DEFAULT_BASE_URL } from "../utils/url";
@@ -22,16 +15,6 @@ export type BhdContextOptions = {
 export const BhdContext: FC<
   PropsWithChildren<{ options: BhdContextOptions }>
 > = ({ children, options }) => {
-  const [dirtyLiveFields, setDirtyLiveFields] = useState<
-    Record<string, Record<string, unknown>>
-  >({});
-
-  const dirtyFieldsRef = useRef(dirtyLiveFields);
-
-  useEffect(() => {
-    dirtyFieldsRef.current = dirtyLiveFields;
-  }, [dirtyLiveFields]);
-
   const [context, setContext] = useState<BhdInternalContextType>(() => {
     const axiosInstance = axios.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
@@ -61,14 +44,15 @@ export const BhdContext: FC<
       ): BhdBlueprintLut[keyof BhdBlueprintLut] => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => <p>Loading...</p>),
       liveEditEnabled: false,
-      onFieldChange: (blockId: string, fieldName: string, value: unknown) => {
-        setDirtyLiveFields({
-          ...dirtyLiveFields,
-          [blockId]: {
-            ...(dirtyLiveFields[blockId] ?? {}),
-            [fieldName]: value,
+      onFieldClick: (blockId: string, fieldName: string) => {
+        window.top?.postMessage(
+          {
+            bhd: true,
+            type: "bhd-live-field-click",
+            field: { blockId, fieldName },
           },
-        });
+          "*",
+        );
       },
       ...options,
     };
@@ -89,21 +73,7 @@ export const BhdContext: FC<
         case "bhd-live-edit":
           setContext((prev) => ({ ...prev, liveEditEnabled: true }));
           break;
-        case "bhd-live-edit-save": {
-          window.top?.postMessage(
-            {
-              bhd: true,
-              type: "bhd-live-edit-save-result",
-              dirtyFields: dirtyFieldsRef.current,
-            },
-            "*",
-          );
-          break;
-        }
         case "bhd-live-edit-reload": {
-          // TODO: i don't like this...
-          // location.reload();
-          setDirtyLiveFields({});
           setContext((prev) => ({ ...prev }));
           break;
         }

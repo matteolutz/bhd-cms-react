@@ -15,7 +15,7 @@ export type BhdInternalContextType = BhdContextType & {
 
   getBlueprintComponent: (id: string) => BhdBlueprintLut[keyof BhdBlueprintLut];
 
-  onFieldChange: (blockId: string, fieldName: string, value: unknown) => void;
+  onFieldClick: (blockId: string, fieldName: string) => void;
 
   loadingComponent: ElementType;
 

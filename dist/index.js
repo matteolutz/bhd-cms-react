@@ -17,17 +17,11 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, inlineComponent, opti
   const bhdField = (fieldName, props) => ({
     ...props,
     "data-bhd-field-name": fieldName,
-    contentEditable: context.liveEditEnabled ? "plaintext-only" : "false",
-    suppressContentEditableWarning: true,
     ...context.liveEditEnabled ? {
-      onInput: (e) => {
-        context.onFieldChange(
-          contentBlock.id,
-          fieldName,
-          e.target.innerText
-        );
-        if (props && typeof props === "object" && "onInput" in props && typeof props.onInput === "function")
-          props.onInput(e);
+      onClick: (e) => {
+        context.onFieldClick(contentBlock.id, fieldName);
+        if (props && typeof props === "object" && "onClick" in props && typeof props.onClick === "function")
+          props.onClick(e);
       }
     } : {}
   });
@@ -132,11 +126,7 @@ var BhdInlineComponent = forwardRef3(({ contentBlockId, children, options, ...re
 });
 
 // src/components/context.tsx
-import {
-  useEffect as useEffect3,
-  useRef,
-  useState as useState3
-} from "react";
+import { useEffect as useEffect3, useState as useState3 } from "react";
 import axios from "axios";
 
 // src/utils/url.ts
@@ -145,11 +135,6 @@ var DEFAULT_BASE_URL = "https://bhd.matteolutz.de";
 // src/components/context.tsx
 import { jsx as jsx4 } from "react/jsx-runtime";
 var BhdContext = ({ children, options }) => {
-  const [dirtyLiveFields, setDirtyLiveFields] = useState3({});
-  const dirtyFieldsRef = useRef(dirtyLiveFields);
-  useEffect3(() => {
-    dirtyFieldsRef.current = dirtyLiveFields;
-  }, [dirtyLiveFields]);
   const [context, setContext] = useState3(() => {
     const axiosInstance = axios.create({
       baseURL: new URL("api", options.baseUrl ?? DEFAULT_BASE_URL).href,
@@ -171,14 +156,15 @@ var BhdContext = ({ children, options }) => {
       getBlueprintComponent: (id) => context.blueprintLut[id],
       loadingComponent: options.loadingComponent ?? (() => /* @__PURE__ */ jsx4("p", { children: "Loading..." })),
       liveEditEnabled: false,
-      onFieldChange: (blockId, fieldName, value) => {
-        setDirtyLiveFields({
-          ...dirtyLiveFields,
-          [blockId]: {
-            ...dirtyLiveFields[blockId] ?? {},
-            [fieldName]: value
-          }
-        });
+      onFieldClick: (blockId, fieldName) => {
+        window.top?.postMessage(
+          {
+            bhd: true,
+            type: "bhd-live-field-click",
+            field: { blockId, fieldName }
+          },
+          "*"
+        );
       },
       ...options
     };
@@ -195,19 +181,7 @@ var BhdContext = ({ children, options }) => {
         case "bhd-live-edit":
           setContext((prev) => ({ ...prev, liveEditEnabled: true }));
           break;
-        case "bhd-live-edit-save": {
-          window.top?.postMessage(
-            {
-              bhd: true,
-              type: "bhd-live-edit-save-result",
-              dirtyFields: dirtyFieldsRef.current
-            },
-            "*"
-          );
-          break;
-        }
         case "bhd-live-edit-reload": {
-          setDirtyLiveFields({});
           setContext((prev) => ({ ...prev }));
           break;
         }
