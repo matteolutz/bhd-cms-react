@@ -58,6 +58,7 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, in
     "data-bhd-field-name": fieldName,
     ...context.liveEditEnabled ? {
       onClick: (e) => {
+        e.stopPropagation();
         console.log(
           "field click",
           contentBlock.id,

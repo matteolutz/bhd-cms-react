@@ -19,6 +19,7 @@ var BhdContentBlockComponent = forwardRef(({ contentBlock, inlineComponent, opti
     "data-bhd-field-name": fieldName,
     ...context.liveEditEnabled ? {
       onClick: (e) => {
+        e.stopPropagation();
         console.log(
           "field click",
           contentBlock.id,

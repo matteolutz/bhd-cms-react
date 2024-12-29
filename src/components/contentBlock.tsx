@@ -33,6 +33,7 @@ export const BhdContentBlockComponent = forwardRef<
     ...(context.liveEditEnabled
       ? {
           onClick: (e) => {
+            e.stopPropagation();
             console.log(
               "field click",
               contentBlock.id,
