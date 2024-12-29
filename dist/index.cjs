@@ -58,6 +58,13 @@ var BhdContentBlockComponent = (0, import_react2.forwardRef)(({ contentBlock, in
     "data-bhd-field-name": fieldName,
     ...context.liveEditEnabled ? {
       onClick: (e) => {
+        console.log(
+          "field click",
+          contentBlock.id,
+          fieldName,
+          "on element",
+          e.target
+        );
         context.onFieldClick(contentBlock.id, fieldName);
         if (props && typeof props === "object" && "onClick" in props && typeof props.onClick === "function")
           props.onClick(e);

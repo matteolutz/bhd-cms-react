@@ -33,6 +33,13 @@ export const BhdContentBlockComponent = forwardRef<
     ...(context.liveEditEnabled
       ? {
           onClick: (e) => {
+            console.log(
+              "field click",
+              contentBlock.id,
+              fieldName,
+              "on element",
+              e.target,
+            );
             context.onFieldClick(contentBlock.id, fieldName);
 
             if (
