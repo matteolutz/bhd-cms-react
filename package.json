@@ -3,7 +3,7 @@
   "author": "Matteo Lutz <info@matteolutz.de>",
   "description": "React.js bindings for the bhd CMS",
   "license": "MIT",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "./dist/index.js",
   "module": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
